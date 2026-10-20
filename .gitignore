@@ -1,0 +1,64 @@
+# Build outputs
+**/bin/
+**/obj/
+**/Debug/
+**/Release/
+**/artifacts/
+**/TestResults/
+**/TestResult*/
+**/BenchmarkDotNet.Artifacts/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.rsuser
+*.DotSettings.user
+
+# Visual Studio Code and other IDEs
+.vscode/
+.idea/
+.fleet/
+.history/
+_ReSharper*/
+*.code-workspace
+
+# Logs and diagnostics
+*.log
+*.binlog
+*.svclog
+*.coverage
+*.coveragexml
+*.trx
+
+# NuGet packages and generated package files
+**/packages/
+*.nupkg
+*.snupkg
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+secrets.json
+appsettings.*.local.json
+
+# Publish and deployment output
+**/publish/
+*.publishsettings
+*.azurePubxml
+
+# Temporary and backup files
+~$*
+*~
+*.tmp
+*.bak
+*.orig
+*.rej
+
+# Operating system
+.DS_Store
+Thumbs.db
+Desktop.ini
