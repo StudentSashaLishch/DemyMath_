@@ -1,39 +1,32 @@
 # DemyMath
 
-DemyMath is a web information system for interactive mathematics learning.
+DemyMath is a web application for learning mathematics through structured topics, practical exercises, and adaptive learning.
 
 ## Technology Stack
 
-- C#
-- .NET 10 LTS
-- ASP.NET Core 10
-- Entity Framework Core 10
-- PostgreSQL 18
-- TypeScript
-- OpenAPI
-- xUnit
-- Docker
-- Git
+- C# and ASP.NET Core MVC
+- Entity Framework Core
+- PostgreSQL
+- Razor Views and Bootstrap
+
+## Project Structure
+
+```text
+DemyMath/
+├── docs/       # Project documentation and policies
+└── src/
+    ├── DemyMath.Web/
+    ├── DemyMath.Domain/
+    ├── DemyMath.Application/
+    └── DemyMath.Infrastructure/
+```
+
+- **Web** — web interface and request handling.
+- **Domain** — core business entities and rules.
+- **Application** — application use cases and abstractions.
+- **Infrastructure** — database access and external technology integrations.
 
 ## Documentation
 
-Project documentation is stored in the `docs/` directory.
+Project policies, business rules, and security requirements are maintained in the `docs/` directory.
 
-```text
-docs/
-├── policy/
-│   └── project_policy.md
-├── business/
-│   └── domain.md
-├── testing.md
-├── tech_debt.md
-└── change_log.md
-```
-
-## Development
-
-The project is under active development. Setup and run instructions are added when the corresponding project configuration is implemented.
-
-## Testing
-
-Automated tests use xUnit. Detailed testing rules are defined in `docs/testing.md`.
