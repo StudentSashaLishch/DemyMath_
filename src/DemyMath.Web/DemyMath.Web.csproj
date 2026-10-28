@@ -4,7 +4,15 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>0df24eee-d1f0-46d0-9005-3cdc154e0f4c</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.33" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.33" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.21" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DemyMath.Application\DemyMath.Application.csproj" />

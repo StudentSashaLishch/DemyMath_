@@ -1,4 +1,4 @@
-namespace DemyMath.Models
+namespace DemyMath.ViewModels
 {
     public class ErrorViewModel
     {
