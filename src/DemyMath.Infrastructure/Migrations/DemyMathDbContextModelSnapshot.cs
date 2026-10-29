@@ -22,6 +22,112 @@ namespace DemyMath.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("DemyMath.Domain.Entities.ContentItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TextStringId")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<int>("TopicId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("VideoUrl")
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TopicId", "Order")
+                        .IsUnique();
+
+                    b.ToTable("ContentItems");
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.LocalizedString", b =>
+                {
+                    b.Property<string>("StringId")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Culture")
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("StringId", "Culture");
+
+                    b.ToTable("LocalizedStrings");
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.Topic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("DescriptionStringId")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<double>("PositionX")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("PositionY")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("TitleStringId")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TitleStringId");
+
+                    b.ToTable("Topics");
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.TopicPrerequisite", b =>
+                {
+                    b.Property<int>("TopicId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PrerequisiteTopicId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("TopicId", "PrerequisiteTopicId");
+
+                    b.HasIndex("PrerequisiteTopicId");
+
+                    b.ToTable("TopicPrerequisites", t =>
+                        {
+                            t.HasCheckConstraint("CK_TopicPrerequisite_NoSelfReference", "\"TopicId\" <> \"PrerequisiteTopicId\"");
+                        });
+                });
+
             modelBuilder.Entity("DemyMath.Infrastructure.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -165,10 +271,12 @@ namespace DemyMath.Infrastructure.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("text");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text");
@@ -205,10 +313,12 @@ namespace DemyMath.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("Value")
                         .HasColumnType("text");
@@ -216,6 +326,36 @@ namespace DemyMath.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.ContentItem", b =>
+                {
+                    b.HasOne("DemyMath.Domain.Entities.Topic", "Topic")
+                        .WithMany("ContentItems")
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.TopicPrerequisite", b =>
+                {
+                    b.HasOne("DemyMath.Domain.Entities.Topic", "PrerequisiteTopic")
+                        .WithMany()
+                        .HasForeignKey("PrerequisiteTopicId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DemyMath.Domain.Entities.Topic", "Topic")
+                        .WithMany("Prerequisites")
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PrerequisiteTopic");
+
+                    b.Navigation("Topic");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -267,6 +407,13 @@ namespace DemyMath.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.Topic", b =>
+                {
+                    b.Navigation("ContentItems");
+
+                    b.Navigation("Prerequisites");
                 });
 #pragma warning restore 612, 618
         }

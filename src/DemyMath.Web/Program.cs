@@ -4,6 +4,10 @@ using DemyMath.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using DemyMath.Application.Localization;
+using DemyMath.Infrastructure.Localization;
+using DemyMath.Application.Topics;
+using DemyMath.Infrastructure.Topics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +65,16 @@ builder.Services
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<DemyMathDbContext>();
 
+builder.Services.AddScoped<
+    ILocalizedStringService,
+    LocalizedStringService>();
+
+builder.Services.AddScoped<
+    ITopicQueryService, 
+    TopicQueryService>();
+
+builder.Services.AddScoped<DevelopmentDataSeeder>();
+
 var app = builder.Build();
 
 // HTTP pipeline
@@ -68,6 +82,15 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
+}
+else
+{
+    await using var scope = app.Services.CreateAsyncScope();
+
+    var seeder = scope.ServiceProvider
+        .GetRequiredService<DevelopmentDataSeeder>();
+
+    await seeder.SeedAsync();
 }
 
 app.UseRequestLocalization();

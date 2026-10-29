@@ -1,0 +1,113 @@
+﻿.learning-graph-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.learning-graph-hint {
+    margin-left: auto;
+}
+
+.learning-graph-viewport {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    min-height: 450px;
+    overflow: hidden;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    background-image: radial-gradient(#ced4da 1px, transparent 1px);
+    background-size: 20px 20px;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+}
+
+    .learning-graph-viewport.is-dragging {
+        cursor: grabbing;
+    }
+
+.learning-graph-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: 0 0;
+    will-change: transform;
+}
+
+.learning-graph-edges {
+    position: absolute;
+    inset: 0;
+    overflow: visible;
+    pointer-events: none;
+}
+
+.graph-node {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 160px;
+    gap: 6px;
+    transform: translate(-50%, -32px);
+    color: #212529;
+    text-decoration: none;
+    text-align: center;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.graph-node-icon {
+    display: flex;
+    flex: 0 0 64px;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    box-sizing: border-box;
+    border: 1px solid #adb5bd;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 8%);
+    font-size: 28px;
+    line-height: 1;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.graph-node-title {
+    display: block;
+    width: 100%;
+    overflow-wrap: anywhere;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.35;
+}
+
+.graph-node:hover {
+    color: #0d6efd;
+}
+
+    .graph-node:hover .graph-node-icon {
+        border-color: #0d6efd;
+        box-shadow: 0 3px 10px rgb(13 110 253 / 18%);
+    }
+
+.graph-node:focus-visible {
+    outline: 3px solid #0d6efd;
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+@media (max-width: 576px) {
+    .learning-graph-hint {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .learning-graph-viewport {
+        min-height: 400px;
+    }
+}

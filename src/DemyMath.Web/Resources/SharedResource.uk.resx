@@ -123,6 +123,9 @@
   <data name="AppName" xml:space="preserve">
     <value>DemyMath</value>
   </data>
+  <data name="BackToLearning" xml:space="preserve">
+    <value>Повернутися до мапи навчання</value>
+  </data>
   <data name="English" xml:space="preserve">
     <value>Англійська</value>
   </data>
@@ -135,7 +138,22 @@
   <data name="Learning" xml:space="preserve">
     <value>Навчання</value>
   </data>
+  <data name="NoTopics" xml:space="preserve">
+    <value>Навчальних тем поки немає</value>
+  </data>
+  <data name="Prerequisites" xml:space="preserve">
+    <value>Необхідні попередні теми</value>
+  </data>
+  <data name="ResetGraph" xml:space="preserve">
+    <value>Вмістити мапу</value>
+  </data>
+  <data name="TopicNumber" xml:space="preserve">
+    <value>Тема</value>
+  </data>
   <data name="Ukrainian" xml:space="preserve">
     <value>Українська</value>
+  </data>
+  <data name="WatchVideo" xml:space="preserve">
+    <value>Переглянути відео</value>
   </data>
 </root>

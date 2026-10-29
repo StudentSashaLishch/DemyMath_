@@ -123,6 +123,9 @@
   <data name="AppName" xml:space="preserve">
     <value>DemyMath</value>
   </data>
+  <data name="BackToLearning" xml:space="preserve">
+    <value>Back to learning map</value>
+  </data>
   <data name="English" xml:space="preserve">
     <value>English</value>
   </data>
@@ -135,7 +138,22 @@
   <data name="Learning" xml:space="preserve">
     <value>Learning</value>
   </data>
+  <data name="NoTopics" xml:space="preserve">
+    <value>No topics available yet</value>
+  </data>
+  <data name="Prerequisites" xml:space="preserve">
+    <value>Prerequisites</value>
+  </data>
+  <data name="ResetGraph" xml:space="preserve">
+    <value>Fit map</value>
+  </data>
+  <data name="TopicNumber" xml:space="preserve">
+    <value>Topic</value>
+  </data>
   <data name="Ukrainian" xml:space="preserve">
     <value>Ukrainian</value>
+  </data>
+  <data name="WatchVideo" xml:space="preserve">
+    <value>Watch video</value>
   </data>
 </root>

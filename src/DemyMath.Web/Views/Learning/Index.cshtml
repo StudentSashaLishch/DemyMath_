@@ -1,0 +1,155 @@
+﻿@model IReadOnlyList<DemyMath.Application.Topics.Models.TopicDetailsDto>
+
+@{
+    ViewData["Title"] = T["Learning"];
+
+    const int nodeWidth = 160;
+    const int nodeHeight = 104;
+    const int nodeRadius = 32;
+    const int padding = 100;
+
+    var graphWidth = Model.Count == 0
+        ? 800
+        : Math.Max(
+            800,
+            (int)Math.Ceiling(Model.Max(t => t.PositionX) + nodeWidth / 2.0 + padding));
+
+    var graphHeight = Model.Count == 0
+        ? 450
+        : Math.Max(
+            450,
+            (int)Math.Ceiling(Model.Max(t => t.PositionY) + nodeHeight / 2.0 + padding));
+
+    var topicsById = Model.ToDictionary(t => t.Id);
+}
+
+<link rel="stylesheet"
+      href="~/css/learning-graph.css"
+      asp-append-version="true" />
+
+<h1>@T["Learning"]</h1>
+
+@if (Model.Count == 0)
+{
+        <p>@T["NoTopics"]</p>
+}
+else
+{
+        <div class="learning-graph-toolbar">
+            <button type="button"
+                    class="btn btn-outline-secondary"
+                    id="zoomOut"
+                    aria-label="Zoom out"
+                    title="Zoom out">
+                −
+            </button>
+
+            <button type="button"
+                    class="btn btn-outline-secondary"
+                    id="zoomIn"
+                    aria-label="Zoom in"
+                    title="Zoom in">
+                +
+            </button>
+
+            <button type="button"
+                    class="btn btn-outline-secondary"
+                    id="resetGraph">
+            @T["ResetGraph"]
+            </button>
+
+            <span class="text-muted" id="zoomLevel">100%</span>
+
+            <span class="text-muted learning-graph-hint">
+            @T["LearningGraphHint"]
+            </span>
+        </div>
+
+        <div id="graphViewport" class="learning-graph-viewport">
+            <div id="graphCanvas"
+                 class="learning-graph-canvas"
+                 style="width:@(graphWidth)px; height:@(graphHeight)px;">
+
+                <svg class="learning-graph-edges"
+                     xmlns="http://www.w3.org/2000/svg"
+                     width="@graphWidth"
+                     height="@graphHeight"
+                     viewBox="0 0 @graphWidth @graphHeight"
+                     aria-hidden="true">
+
+                    <defs>
+                        <marker id="graphArrow"
+                                markerWidth="8"
+                                markerHeight="8"
+                                refX="7"
+                                refY="4"
+                                orient="auto"
+                                markerUnits="userSpaceOnUse">
+                            <path d="M0,0 L8,4 L0,8 Z" fill="#6c757d" />
+                        </marker>
+                    </defs>
+
+                @foreach (var topic in Model)
+                {
+                    @foreach (var prerequisiteId in topic.PrerequisiteTopicIds)
+                    {
+                        if (!topicsById.TryGetValue(prerequisiteId, out var prerequisite))
+                        {
+                            continue;
+                        }
+
+                        var dx = topic.PositionX - prerequisite.PositionX;
+                        var dy = topic.PositionY - prerequisite.PositionY;
+                        var distance = Math.Sqrt(dx * dx + dy * dy);
+
+                        if (distance > 0)
+                        {
+                            var ux = dx / distance;
+                            var uy = dy / distance;
+
+                            var startOffset = nodeRadius;
+                            var endOffset = nodeRadius + 5;
+
+                                            <line
+                                                x1="@(prerequisite.PositionX + ux * startOffset)"
+                                                y1="@(prerequisite.PositionY + uy * startOffset)"
+                                                x2="@(topic.PositionX - ux * endOffset)"
+                                                y2="@(topic.PositionY - uy * endOffset)"
+                                                stroke="#6c757d"
+                                                stroke-width="2"
+                                                marker-end="url(#graphArrow)" />
+                        }
+                    }
+                }
+                </svg>
+
+            @foreach (var topic in Model)
+            {
+                        <a asp-controller="Learning"
+                           asp-action="Topic"
+                           asp-route-id="@topic.Id"
+                           class="graph-node"
+                           data-topic-id="@topic.Id"
+                           title="@topic.Title"
+                           aria-label="@topic.Title"
+                           style="left:@(topic.PositionX)px; top:@(topic.PositionY)px;">
+
+                            <span class="graph-node-icon" aria-hidden="true">
+                        @if (!string.IsNullOrWhiteSpace(topic.Icon))
+                        {
+                            @topic.Icon
+                        }
+                            </span>
+
+                            <span class="graph-node-title">
+                        @topic.Title
+                            </span>
+                        </a>
+            }
+            </div>
+        </div>
+}
+
+<script src="~/js/learning-graph.js"
+        asp-append-version="true"
+        defer></script>

@@ -1,0 +1,77 @@
+﻿
+@model DemyMath.Application.Topics.Models.TopicDetailsDto
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a asp-controller="Learning" asp-action="Index">
+                @T["Learning"]
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            @Model.Title
+        </li>
+    </ol>
+</nav>
+
+<h1>@Model.Title</h1>
+
+@if (!string.IsNullOrWhiteSpace(Model.Description))
+{
+    <p class="lead">@Model.Description</p>
+}
+
+@if (Model.PrerequisiteTopicIds.Count > 0)
+{
+    <h2 class="h4 mt-4">@T["Prerequisites"]</h2>
+
+    <ul>
+        @foreach (var prerequisiteId in Model.PrerequisiteTopicIds)
+        {
+            <li>
+                <a asp-controller="Learning"
+                   asp-action="Topic"
+                   asp-route-id="@prerequisiteId">
+                    @T["TopicNumber"] @prerequisiteId
+                </a>
+            </li>
+        }
+    </ul>
+}
+
+<section class="mt-4">
+    @foreach (var item in Model.ContentItems.OrderBy(x => x.Order))
+    {
+        if (item.Type == "Text" && !string.IsNullOrWhiteSpace(item.Text))
+        {
+            <div class="mb-4">
+                <p>@item.Text</p>
+            </div>
+        }
+        else if (item.Type == "Video" &&
+                 !string.IsNullOrWhiteSpace(item.VideoUrl))
+        {
+            <div class="mb-4">
+                <div class="ratio ratio-16x9">
+                    <iframe src="@item.VideoUrl"
+                        title="@Model.Title"
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        }
+    }
+</section>
+
+<a asp-controller="Learning"
+   asp-action="Index"
+   class="btn btn-outline-secondary mt-3">
+    @T["BackToLearning"]
+</a>
