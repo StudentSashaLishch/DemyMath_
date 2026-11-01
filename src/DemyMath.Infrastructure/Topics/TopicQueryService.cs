@@ -57,6 +57,10 @@ public class TopicQueryService : ITopicQueryService
             return null;
         }
 
+        var hasTest = await _dbContext.Tests
+            .AsNoTracking()
+            .AnyAsync(t => t.TopicId == topicId, cancellationToken);
+
         var stringIds = topic.ContentItems
             .Where(c => c.TextStringId != null)
             .Select(c => c.TextStringId!)
@@ -81,6 +85,7 @@ public class TopicQueryService : ITopicQueryService
             PositionX = topic.PositionX,
             PositionY = topic.PositionY,
             Icon = topic.Icon,
+            HasTest = hasTest,
             PrerequisiteTopicIds = topic.PrerequisiteTopicIds,
             ContentItems = topic.ContentItems
                 .Select(c => new TopicContentItemDto

@@ -1,5 +1,4 @@
-﻿
-@model DemyMath.Application.Topics.Models.TopicDetailsDto
+﻿@model DemyMath.Application.Topics.Models.TopicDetailsDto
 
 @{
     ViewData["Title"] = Model.Title;
@@ -58,11 +57,11 @@
             <div class="mb-4">
                 <div class="ratio ratio-16x9">
                     <iframe src="@item.VideoUrl"
-                        title="@Model.Title"
-                        loading="lazy"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin"
-                        allowfullscreen>
+                            title="@Model.Title"
+                            loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen>
                     </iframe>
                 </div>
             </div>
@@ -70,8 +69,20 @@
     }
 </section>
 
-<a asp-controller="Learning"
-   asp-action="Index"
-   class="btn btn-outline-secondary mt-3">
-    @T["BackToLearning"]
-</a>
+<div class="d-flex flex-wrap gap-2 mt-4">
+    @if (Model.HasTest)
+    {
+        <a asp-controller="Learning"
+           asp-action="Test"
+           asp-route-id="@Model.Id"
+           class="btn btn-primary">
+            @T["StartTest"]
+        </a>
+    }
+
+    <a asp-controller="Learning"
+       asp-action="Index"
+       class="btn btn-outline-secondary">
+        @T["BackToLearning"]
+    </a>
+</div>

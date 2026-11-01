@@ -1,0 +1,187 @@
+﻿@using System.Globalization
+@model DemyMath.ViewModels.TestPageViewModel
+
+@{
+    ViewData["Title"] = T["Test"];
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a asp-controller="Learning" asp-action="Index">
+                @T["Learning"]
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a asp-controller="Learning"
+               asp-action="Topic"
+               asp-route-id="@Model.Test.TopicId">
+                @Model.Test.TopicTitle
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            @T["Test"]
+        </li>
+    </ol>
+</nav>
+
+<h1>@T["Test"]</h1>
+<p class="lead">@Model.Test.TopicTitle</p>
+
+@if (Model.Result is not null)
+{
+    <section class="mt-4">
+        <h2 class="h4">@T["TestResult"]</h2>
+
+        <p class="fs-5">
+            @T["Score"]:
+            <strong>
+                @Model.Result.CorrectAnswers / @Model.Result.TotalQuestions
+            </strong>
+        </p>
+
+        <div class="list-group mb-4">
+            @foreach (var result in Model.Result.Questions)
+            {
+                <div class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-start gap-3">
+                        <span>@result.Text</span>
+
+                        @if (result.IsCorrect)
+                        {
+                            <span class="badge text-bg-success text-black">
+                                @T["Correct"]
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge text-bg-danger text-black">
+                                @T["Incorrect"]
+                            </span>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+}
+else if (Model.Test.Questions.Count == 0)
+{
+    <p>@T["NoQuestions"]</p>
+}
+else
+{
+    <form asp-controller="Learning"
+      asp-action="Test"
+      asp-route-id="@Model.Test.TopicId"
+      method="post"
+      id="testForm">
+
+        @Html.AntiForgeryToken()
+
+        @for (var i = 0; i < Model.Test.Questions.Count; i++)
+        {
+            var question = Model.Test.Questions[i];
+
+            <section class="card mb-4">
+                <div class="card-body">
+                    <h2 class="h5 mb-3">
+                        @T["Question"] @(i + 1)
+                    </h2>
+
+                    <p class="mb-3">@question.Text</p>
+
+                    <input type="hidden"
+                           name="Answers[@i].QuestionId"
+                           value="@question.Id" />
+
+                    @if (question.Type == "MultipleChoice")
+                    {
+                        <div class="d-flex flex-column gap-2">
+                            @foreach (var option in question.Options)
+                            {
+                                <label class="form-check">
+                                    <input class="form-check-input"
+                                           type="radio"
+                                           name="Answers[@i].SelectedOptionId"
+                                           value="@option.Id" />
+
+                                    <span class="form-check-label">
+                                        @option.Text
+                                    </span>
+                                </label>
+                            }
+                        </div>
+                    }
+                    else if (question.Type == "Numeric")
+                    {
+                        <label class="form-label"
+                               for="numeric-@question.Id">
+                            @T["EnterNumber"]
+                        </label>
+
+                        <input class="form-control"
+                               type="text"
+                               inputmode="decimal"
+                               autocomplete="off"
+                               id="numeric-@question.Id"
+                               name="Answers[@i].NumericAnswer" />
+                    }
+                    else if (question.Type == "CoordinatePoint")
+                    {
+                        <p class="text-muted">
+                            @T["ChoosePoint"]
+                        </p>
+
+                        <div class="coordinate-question"
+                             data-min-x="@question.MinX!.Value.ToString(CultureInfo.InvariantCulture)"
+                             data-max-x="@question.MaxX!.Value.ToString(CultureInfo.InvariantCulture)"
+                             data-min-y="@question.MinY!.Value.ToString(CultureInfo.InvariantCulture)"
+                             data-max-y="@question.MaxY!.Value.ToString(CultureInfo.InvariantCulture)"
+                             data-grid-step="@question.GridStep!.Value.ToString(CultureInfo.InvariantCulture)"
+                             data-selected-label="@T["SelectedPoint"]">
+
+                            <div class="coordinate-plane-container">
+                                <svg class="coordinate-plane"
+                                     viewBox="0 0 600 400"
+                                     role="img"
+                                     aria-label="@T["CoordinatePlane"]">
+                                </svg>
+                            </div>
+
+                            <input type="hidden"
+                                   class="point-x"
+                                   name="Answers[@i].X" />
+
+                            <input type="hidden"
+                                   class="point-y"
+                                   name="Answers[@i].Y" />
+
+                            <p class="coordinate-selection text-muted mt-2"
+                               aria-live="polite">
+                                @T["PointNotSelected"]
+                            </p>
+                        </div>
+                    }
+                </div>
+            </section>
+        }
+
+        <button type="submit" class="btn btn-primary">
+            @T["SubmitTest"]
+        </button>
+    </form>
+}
+
+<div class="mt-4">
+    <a asp-controller="Learning"
+       asp-action="Topic"
+       asp-route-id="@Model.Test.TopicId"
+       class="btn btn-outline-secondary">
+        @T["BackToTopic"]
+    </a>
+</div>
+
+@section Scripts {
+    <script src="~/js/coordinate-plane.js" asp-append-version="true"></script>
+}

@@ -19,6 +19,13 @@ public class DemyMathDbContext
     public DbSet<ContentItem> ContentItems => Set<ContentItem>();
     public DbSet<LocalizedString> LocalizedStrings => Set<LocalizedString>();
 
+    public DbSet<Test> Tests => Set<Test>();
+    public DbSet<Question> Questions => Set<Question>();
+    public DbSet<MultipleChoiceQuestion> MultipleChoiceQuestions => Set<MultipleChoiceQuestion>();
+    public DbSet<NumericQuestion> NumericQuestions => Set<NumericQuestion>();
+    public DbSet<CoordinatePointQuestion> CoordinatePointQuestions => Set<CoordinatePointQuestion>();
+    public DbSet<QuestionOption> QuestionOptions => Set<QuestionOption>();
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -103,5 +110,88 @@ public class DemyMathDbContext
             entity.Property(s => s.Value)
                 .IsRequired();
         });
+
+        builder.Entity<Test>(entity =>
+        {
+            entity.HasIndex(t => t.TopicId)
+                .IsUnique();
+
+            entity.HasOne(t => t.Topic)
+                .WithOne()
+                .HasForeignKey<Test>(t => t.TopicId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<Question>(entity =>
+        {
+            entity.UseTptMappingStrategy();
+            entity.ToTable("Questions");
+
+            entity.Property(q => q.TextStringId)
+                .HasMaxLength(200)
+                .IsRequired();
+
+            entity.HasIndex(q => new
+            {
+                q.TestId,
+                q.Order
+            }).IsUnique();
+
+            entity.HasOne(q => q.Test)
+                .WithMany(t => t.Questions)
+                .HasForeignKey(q => q.TestId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<MultipleChoiceQuestion>()
+            .ToTable("MultipleChoiceQuestions");
+
+        builder.Entity<NumericQuestion>()
+            .ToTable(
+                "NumericQuestions",
+                table => table.HasCheckConstraint(
+                    "CK_NumericQuestion_NonNegativeTolerance",
+                    "\"Tolerance\" >= 0"));
+
+        builder.Entity<CoordinatePointQuestion>()
+            .ToTable(
+                "CoordinatePointQuestions",
+                table =>
+                {
+                    table.HasCheckConstraint(
+                        "CK_CoordinateQuestion_NonNegativeTolerance",
+                        "\"Tolerance\" >= 0");
+
+                    table.HasCheckConstraint(
+                        "CK_CoordinateQuestion_ValidXRange",
+                        "\"MinX\" < \"MaxX\"");
+
+                    table.HasCheckConstraint(
+                        "CK_CoordinateQuestion_ValidYRange",
+                        "\"MinY\" < \"MaxY\"");
+
+                    table.HasCheckConstraint(
+                        "CK_CoordinateQuestion_PositiveGridStep",
+                        "\"GridStep\" > 0");
+                });
+
+        builder.Entity<QuestionOption>(entity =>
+        {
+            entity.Property(o => o.TextStringId)
+                .HasMaxLength(200)
+                .IsRequired();
+
+            entity.HasIndex(o => new
+            {
+                o.QuestionId,
+                o.Order
+            }).IsUnique();
+        });
+
+        builder.Entity<MultipleChoiceQuestion>()
+            .HasMany(q => q.Options)
+            .WithOne(o => o.Question)
+            .HasForeignKey(o => o.QuestionId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

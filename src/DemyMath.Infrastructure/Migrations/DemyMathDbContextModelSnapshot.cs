@@ -76,6 +76,84 @@ namespace DemyMath.Infrastructure.Migrations
                     b.ToTable("LocalizedStrings");
                 });
 
+            modelBuilder.Entity("DemyMath.Domain.Entities.Question", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TestId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TextStringId")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestId", "Order")
+                        .IsUnique();
+
+                    b.ToTable("Questions", (string)null);
+
+                    b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.QuestionOption", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TextStringId")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId", "Order")
+                        .IsUnique();
+
+                    b.ToTable("QuestionOptions");
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.Test", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("TopicId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TopicId")
+                        .IsUnique();
+
+                    b.ToTable("Tests");
+                });
+
             modelBuilder.Entity("DemyMath.Domain.Entities.Topic", b =>
                 {
                     b.Property<int>("Id")
@@ -328,11 +406,107 @@ namespace DemyMath.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("DemyMath.Domain.Entities.CoordinatePointQuestion", b =>
+                {
+                    b.HasBaseType("DemyMath.Domain.Entities.Question");
+
+                    b.Property<decimal>("CorrectX")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("CorrectY")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("GridStep")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("MaxX")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("MaxY")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("MinX")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("MinY")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("Tolerance")
+                        .HasColumnType("numeric");
+
+                    b.ToTable("CoordinatePointQuestions", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_CoordinateQuestion_NonNegativeTolerance", "\"Tolerance\" >= 0");
+
+                            t.HasCheckConstraint("CK_CoordinateQuestion_PositiveGridStep", "\"GridStep\" > 0");
+
+                            t.HasCheckConstraint("CK_CoordinateQuestion_ValidXRange", "\"MinX\" < \"MaxX\"");
+
+                            t.HasCheckConstraint("CK_CoordinateQuestion_ValidYRange", "\"MinY\" < \"MaxY\"");
+                        });
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.MultipleChoiceQuestion", b =>
+                {
+                    b.HasBaseType("DemyMath.Domain.Entities.Question");
+
+                    b.ToTable("MultipleChoiceQuestions", (string)null);
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.NumericQuestion", b =>
+                {
+                    b.HasBaseType("DemyMath.Domain.Entities.Question");
+
+                    b.Property<decimal>("CorrectAnswer")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("Tolerance")
+                        .HasColumnType("numeric");
+
+                    b.ToTable("NumericQuestions", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_NumericQuestion_NonNegativeTolerance", "\"Tolerance\" >= 0");
+                        });
+                });
+
             modelBuilder.Entity("DemyMath.Domain.Entities.ContentItem", b =>
                 {
                     b.HasOne("DemyMath.Domain.Entities.Topic", "Topic")
                         .WithMany("ContentItems")
                         .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.Question", b =>
+                {
+                    b.HasOne("DemyMath.Domain.Entities.Test", "Test")
+                        .WithMany("Questions")
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Test");
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.QuestionOption", b =>
+                {
+                    b.HasOne("DemyMath.Domain.Entities.MultipleChoiceQuestion", "Question")
+                        .WithMany("Options")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.Test", b =>
+                {
+                    b.HasOne("DemyMath.Domain.Entities.Topic", "Topic")
+                        .WithOne()
+                        .HasForeignKey("DemyMath.Domain.Entities.Test", "TopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -409,11 +583,48 @@ namespace DemyMath.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DemyMath.Domain.Entities.CoordinatePointQuestion", b =>
+                {
+                    b.HasOne("DemyMath.Domain.Entities.Question", null)
+                        .WithOne()
+                        .HasForeignKey("DemyMath.Domain.Entities.CoordinatePointQuestion", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.MultipleChoiceQuestion", b =>
+                {
+                    b.HasOne("DemyMath.Domain.Entities.Question", null)
+                        .WithOne()
+                        .HasForeignKey("DemyMath.Domain.Entities.MultipleChoiceQuestion", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.NumericQuestion", b =>
+                {
+                    b.HasOne("DemyMath.Domain.Entities.Question", null)
+                        .WithOne()
+                        .HasForeignKey("DemyMath.Domain.Entities.NumericQuestion", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.Test", b =>
+                {
+                    b.Navigation("Questions");
+                });
+
             modelBuilder.Entity("DemyMath.Domain.Entities.Topic", b =>
                 {
                     b.Navigation("ContentItems");
 
                     b.Navigation("Prerequisites");
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.MultipleChoiceQuestion", b =>
+                {
+                    b.Navigation("Options");
                 });
 #pragma warning restore 612, 618
         }

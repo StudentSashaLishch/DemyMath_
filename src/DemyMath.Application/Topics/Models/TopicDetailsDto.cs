@@ -10,6 +10,8 @@ public class TopicDetailsDto
     public double PositionY { get; init; }
     public string? Icon { get; init; }
 
+    public bool HasTest { get; init; }
+
     public IReadOnlyList<int> PrerequisiteTopicIds { get; init; }
         = [];
 
