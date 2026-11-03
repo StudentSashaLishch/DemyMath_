@@ -57,8 +57,39 @@ namespace DemyMath.Infrastructure.Migrations
                     b.ToTable("ContentItems");
                 });
 
+            modelBuilder.Entity("DemyMath.Domain.Entities.LearningContentVersion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("PublishedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Status")
+                        .IsUnique()
+                        .HasFilter("\"Status\" = 'Published'");
+
+                    b.ToTable("LearningContentVersions");
+                });
+
             modelBuilder.Entity("DemyMath.Domain.Entities.LocalizedString", b =>
                 {
+                    b.Property<int>("VersionId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("StringId")
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
@@ -71,7 +102,7 @@ namespace DemyMath.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("StringId", "Culture");
+                    b.HasKey("VersionId", "StringId", "Culture");
 
                     b.ToTable("LocalizedStrings");
                 });
@@ -181,9 +212,14 @@ namespace DemyMath.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
+                    b.Property<int>("VersionId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TitleStringId");
+
+                    b.HasIndex("VersionId");
 
                     b.ToTable("Topics");
                 });
@@ -480,6 +516,17 @@ namespace DemyMath.Infrastructure.Migrations
                     b.Navigation("Topic");
                 });
 
+            modelBuilder.Entity("DemyMath.Domain.Entities.LocalizedString", b =>
+                {
+                    b.HasOne("DemyMath.Domain.Entities.LearningContentVersion", "Version")
+                        .WithMany("LocalizedStrings")
+                        .HasForeignKey("VersionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Version");
+                });
+
             modelBuilder.Entity("DemyMath.Domain.Entities.Question", b =>
                 {
                     b.HasOne("DemyMath.Domain.Entities.Test", "Test")
@@ -511,6 +558,17 @@ namespace DemyMath.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.Topic", b =>
+                {
+                    b.HasOne("DemyMath.Domain.Entities.LearningContentVersion", "Version")
+                        .WithMany("Topics")
+                        .HasForeignKey("VersionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Version");
                 });
 
             modelBuilder.Entity("DemyMath.Domain.Entities.TopicPrerequisite", b =>
@@ -608,6 +666,13 @@ namespace DemyMath.Infrastructure.Migrations
                         .HasForeignKey("DemyMath.Domain.Entities.NumericQuestion", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.LearningContentVersion", b =>
+                {
+                    b.Navigation("LocalizedStrings");
+
+                    b.Navigation("Topics");
                 });
 
             modelBuilder.Entity("DemyMath.Domain.Entities.Test", b =>

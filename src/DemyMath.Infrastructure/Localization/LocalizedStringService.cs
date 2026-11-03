@@ -16,11 +16,14 @@ public class LocalizedStringService : ILocalizedStringService
     public async Task<string> GetAsync(
         string stringId,
         string culture,
+        int versionId,
         CancellationToken cancellationToken = default)
     {
         var value = await _dbContext.LocalizedStrings
-            .Where(s => s.StringId == stringId &&
-                        s.Culture == culture)
+            .Where(s =>
+                s.VersionId == versionId &&
+                s.StringId == stringId &&
+                s.Culture == culture)
             .Select(s => s.Value)
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -30,6 +33,7 @@ public class LocalizedStringService : ILocalizedStringService
     public async Task<IReadOnlyDictionary<string, string>> GetManyAsync(
         IEnumerable<string> stringIds,
         string culture,
+        int versionId,
         CancellationToken cancellationToken = default)
     {
         var ids = stringIds
@@ -43,8 +47,10 @@ public class LocalizedStringService : ILocalizedStringService
         }
 
         var values = await _dbContext.LocalizedStrings
-            .Where(s => ids.Contains(s.StringId) &&
-                        s.Culture == culture)
+            .Where(s =>
+                s.VersionId == versionId &&
+                ids.Contains(s.StringId) &&
+                s.Culture == culture)
             .ToDictionaryAsync(
                 s => s.StringId,
                 s => s.Value,

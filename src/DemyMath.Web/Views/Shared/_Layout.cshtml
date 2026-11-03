@@ -12,8 +12,8 @@
 
     <link rel="stylesheet"
           href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" 
-          href="~/css/coordinate-plane.css" 
+    <link rel="stylesheet"
+          href="~/css/coordinate-plane.css"
           asp-append-version="true" />
     <link rel="stylesheet"
           href="~/css/site.css"
@@ -63,43 +63,55 @@
                                 @T["Learning"]
                             </a>
                         </li>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                   asp-controller="Admin"
+                                   asp-action="Index">
+                                    @T["AdminPanel"]
+                                </a>
+                            </li>
+                        }
                     </ul>
 
                     <ul class="navbar-nav ms-auto">
                         @if (User.Identity?.IsAuthenticated == true)
                         {
-                            <li class="nav-item">
-                                <span class="nav-link text-dark">
+                                <li class="nav-item">
+                                    <span class="nav-link text-dark">
                                     @User.Identity.Name
-                                </span>
-                            </li>
-                            <li class="nav-item">
-                                <form asp-area="Identity"
-                                      asp-page="/Account/Logout"
-                                      asp-route-returnUrl="/"
-                                      method="post">
-                                    <button type="submit" class="nav-link btn btn-link text-dark">
+                                    </span>
+                                </li>
+                                <li class="nav-item">
+                                    <form asp-area="Identity"
+                                          asp-page="/Account/Logout"
+                                          asp-route-returnUrl="/"
+                                          method="post">
+                                        <button type="submit"
+                                                class="nav-link btn btn-link text-dark">
                                         @T["Logout"]
-                                    </button>
-                                </form>
-                            </li>
+                                        </button>
+                                    </form>
+                                </li>
                         }
                         else
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark"
-                                   asp-area="Identity"
-                                   asp-page="/Account/Login">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                       asp-area="Identity"
+                                       asp-page="/Account/Login">
                                     @T["Login"]
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark"
-                                   asp-area="Identity"
-                                   asp-page="/Account/Register">
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                       asp-area="Identity"
+                                       asp-page="/Account/Register">
                                     @T["Register"]
-                                </a>
-                            </li>
+                                    </a>
+                                </li>
                         }
                     </ul>
 

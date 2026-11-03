@@ -120,8 +120,29 @@
   <data name="About" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="AddMaterial" xml:space="preserve">
+    <value>Add material</value>
+  </data>
+  <data name="AddOption" xml:space="preserve">
+    <value>Add option</value>
+  </data>
+  <data name="AdminPanel" xml:space="preserve">
+    <value>Admin panel</value>
+  </data>
+  <data name="AdminTopicsEmpty" xml:space="preserve">
+    <value>There are no topics in the draft yet.</value>
+  </data>
+  <data name="AdminTopicsTitle" xml:space="preserve">
+    <value>Manage learning topics</value>
+  </data>
   <data name="AppName" xml:space="preserve">
     <value>DemyMath</value>
+  </data>
+  <data name="Available" xml:space="preserve">
+    <value>Available</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
   </data>
   <data name="BackToLearning" xml:space="preserve">
     <value>Back to learning map</value>
@@ -129,17 +150,47 @@
   <data name="BackToTopic" xml:space="preserve">
     <value>Back to topic</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="ChoosePoint" xml:space="preserve">
     <value>Click on the coordinate plane to select a point.</value>
   </data>
+  <data name="ConfirmDeleteTest" xml:space="preserve">
+    <value>Are you sure you want to delete this test?</value>
+  </data>
+  <data name="ConfirmDeleteTopic" xml:space="preserve">
+    <value>Delete this topic? Its test and materials will also be deleted. References to it as a prerequisite will be removed.</value>
+  </data>
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Confirm password</value>
+  </data>
+  <data name="ConfirmPublish" xml:space="preserve">
+    <value>Are you sure you want to publish the current draft? The previous published version will be replaced.</value>
   </data>
   <data name="CoordinatePlane" xml:space="preserve">
     <value>Coordinate plane</value>
   </data>
   <data name="Correct" xml:space="preserve">
     <value>Correct</value>
+  </data>
+  <data name="CreateTopic" xml:space="preserve">
+    <value>Create topic</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeleteTest" xml:space="preserve">
+    <value>Delete test</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="EditTopic" xml:space="preserve">
+    <value>Edit topic</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
@@ -153,6 +204,9 @@
   <data name="Home" xml:space="preserve">
     <value>Home</value>
   </data>
+  <data name="Icon" xml:space="preserve">
+    <value>Icon</value>
+  </data>
   <data name="Incorrect" xml:space="preserve">
     <value>Incorrect</value>
   </data>
@@ -165,6 +219,9 @@
   <data name="Learning" xml:space="preserve">
     <value>Learning</value>
   </data>
+  <data name="LearningMaterials" xml:space="preserve">
+    <value>Learning materials</value>
+  </data>
   <data name="Login" xml:space="preserve">
     <value>Log in</value>
   </data>
@@ -174,8 +231,20 @@
   <data name="Logout" xml:space="preserve">
     <value>Log out</value>
   </data>
+  <data name="Material" xml:space="preserve">
+    <value>Material</value>
+  </data>
+  <data name="MaterialType" xml:space="preserve">
+    <value>Material type</value>
+  </data>
+  <data name="NoOtherTopics" xml:space="preserve">
+    <value>No other topics</value>
+  </data>
   <data name="NoQuestions" xml:space="preserve">
     <value>This test has no questions yet.</value>
+  </data>
+  <data name="NotAvailable" xml:space="preserve">
+    <value>Not available</value>
   </data>
   <data name="NoTopics" xml:space="preserve">
     <value>No topics available yet</value>
@@ -189,8 +258,23 @@
   <data name="PointNotSelected" xml:space="preserve">
     <value>No point selected</value>
   </data>
+  <data name="PositionX" xml:space="preserve">
+    <value>Position X</value>
+  </data>
+  <data name="PositionY" xml:space="preserve">
+    <value>Position Y</value>
+  </data>
   <data name="Prerequisites" xml:space="preserve">
     <value>Prerequisites</value>
+  </data>
+  <data name="PrerequisiteTopics" xml:space="preserve">
+    <value>Prerequisite topics</value>
+  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>Publish changes</value>
+  </data>
+  <data name="PublishFailed" xml:space="preserve">
+    <value>Failed to publish the draft.</value>
   </data>
   <data name="Question" xml:space="preserve">
     <value>Question</value>
@@ -207,8 +291,14 @@
   <data name="RemeberMe" xml:space="preserve">
     <value>Remember me</value>
   </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
   <data name="ResetGraph" xml:space="preserve">
     <value>Fit map</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
   </data>
   <data name="Score" xml:space="preserve">
     <value>Score</value>
@@ -228,11 +318,44 @@
   <data name="TestResult" xml:space="preserve">
     <value>Test result</value>
   </data>
+  <data name="TextMaterial" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="Topic" xml:space="preserve">
+    <value>Topic</value>
+  </data>
+  <data name="TopicDeleted" xml:space="preserve">
+    <value>Topic deleted from draft.</value>
+  </data>
+  <data name="TopicDescription" xml:space="preserve">
+    <value>Topic description</value>
+  </data>
   <data name="TopicNumber" xml:space="preserve">
     <value>Topic</value>
   </data>
+  <data name="TopicProperties" xml:space="preserve">
+    <value>Topic properties</value>
+  </data>
+  <data name="TopicSaved" xml:space="preserve">
+    <value>Topic saved to draft.</value>
+  </data>
+  <data name="TopicTitle" xml:space="preserve">
+    <value>Topic title</value>
+  </data>
+  <data name="Translation" xml:space="preserve">
+    <value>Translation</value>
+  </data>
   <data name="Ukrainian" xml:space="preserve">
     <value>Ukrainian</value>
+  </data>
+  <data name="VersionPublished" xml:space="preserve">
+    <value>Changes published successfully.</value>
+  </data>
+  <data name="VideoMaterial" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="VideoUrl" xml:space="preserve">
+    <value>Video URL</value>
   </data>
   <data name="WatchVideo" xml:space="preserve">
     <value>Watch video</value>

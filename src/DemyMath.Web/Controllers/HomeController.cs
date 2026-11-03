@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using DemyMath.ViewModels;
+using DemyMath.Models;
 using DemyMath.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;

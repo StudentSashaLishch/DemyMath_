@@ -11,6 +11,9 @@ public class Topic
     public double PositionY { get; set; }
     public string? Icon { get; set; }
 
+    public int VersionId { get; set; }
+    public LearningContentVersion Version { get; set; } = null!;
+
     public ICollection<TopicPrerequisite> Prerequisites { get; set; }
         = new List<TopicPrerequisite>();
 

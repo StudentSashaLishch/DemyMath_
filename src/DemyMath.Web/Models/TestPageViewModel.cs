@@ -1,6 +1,6 @@
 ﻿using DemyMath.Application.Tests.Models;
 
-namespace DemyMath.ViewModels;
+namespace DemyMath.Models;
 
 public class TestPageViewModel
 {

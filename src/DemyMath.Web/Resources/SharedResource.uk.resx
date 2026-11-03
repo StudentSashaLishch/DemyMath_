@@ -120,8 +120,29 @@
   <data name="About" xml:space="preserve">
     <value>Про проєкт</value>
   </data>
+  <data name="AddMaterial" xml:space="preserve">
+    <value>Додати матеріал</value>
+  </data>
+  <data name="AddOption" xml:space="preserve">
+    <value>Додати варіант</value>
+  </data>
+  <data name="AdminPanel" xml:space="preserve">
+    <value>Адмінпанель</value>
+  </data>
+  <data name="AdminTopicsEmpty" xml:space="preserve">
+    <value>У чернетці поки немає навчальних тем.</value>
+  </data>
+  <data name="AdminTopicsTitle" xml:space="preserve">
+    <value>Керування навчальними темами</value>
+  </data>
   <data name="AppName" xml:space="preserve">
     <value>DemyMath</value>
+  </data>
+  <data name="Available" xml:space="preserve">
+    <value>Є</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Назад</value>
   </data>
   <data name="BackToLearning" xml:space="preserve">
     <value>Повернутися до мапи навчання</value>
@@ -129,17 +150,47 @@
   <data name="BackToTopic" xml:space="preserve">
     <value>Повернутися до теми</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
   <data name="ChoosePoint" xml:space="preserve">
     <value>Натисність на координатній площині, щоб вибрати точку</value>
   </data>
+  <data name="ConfirmDeleteTest" xml:space="preserve">
+    <value>Ви впевнені, що хочете видалити цей тест?</value>
+  </data>
+  <data name="ConfirmDeleteTopic" xml:space="preserve">
+    <value>Видалити цю тему? Її тест і матеріали також буде видалено. Посилання на неї як на попередню тему буде прибрано.</value>
+  </data>
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Підтвердіть пароль</value>
+  </data>
+  <data name="ConfirmPublish" xml:space="preserve">
+    <value>Опублікувати поточну чернетку? Попередню опубліковану версію буде замінено.</value>
   </data>
   <data name="CoordinatePlane" xml:space="preserve">
     <value>Координатна площина</value>
   </data>
   <data name="Correct" xml:space="preserve">
     <value>Правильно</value>
+  </data>
+  <data name="CreateTopic" xml:space="preserve">
+    <value>Створити тему</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
+  <data name="DeleteTest" xml:space="preserve">
+    <value>Видалити тест</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Опис</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Редагувати</value>
+  </data>
+  <data name="EditTopic" xml:space="preserve">
+    <value>Редагування теми</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Електронна пошта</value>
@@ -153,6 +204,9 @@
   <data name="Home" xml:space="preserve">
     <value>Головна</value>
   </data>
+  <data name="Icon" xml:space="preserve">
+    <value>Іконка</value>
+  </data>
   <data name="Incorrect" xml:space="preserve">
     <value>Неправильно</value>
   </data>
@@ -165,6 +219,9 @@
   <data name="Learning" xml:space="preserve">
     <value>Навчання</value>
   </data>
+  <data name="LearningMaterials" xml:space="preserve">
+    <value>Навчальні матеріали</value>
+  </data>
   <data name="Login" xml:space="preserve">
     <value>Увійти</value>
   </data>
@@ -174,8 +231,20 @@
   <data name="Logout" xml:space="preserve">
     <value>Вийти</value>
   </data>
+  <data name="Material" xml:space="preserve">
+    <value>Матеріал</value>
+  </data>
+  <data name="MaterialType" xml:space="preserve">
+    <value>Тип матеріалу</value>
+  </data>
+  <data name="NoOtherTopics" xml:space="preserve">
+    <value>Інших тем немає</value>
+  </data>
   <data name="NoQuestions" xml:space="preserve">
     <value>У цьому тесті поки немає запитань.</value>
+  </data>
+  <data name="NotAvailable" xml:space="preserve">
+    <value>Немає</value>
   </data>
   <data name="NoTopics" xml:space="preserve">
     <value>Навчальних тем поки немає</value>
@@ -189,8 +258,23 @@
   <data name="PointNotSelected" xml:space="preserve">
     <value>Точку ще не вибрано</value>
   </data>
+  <data name="PositionX" xml:space="preserve">
+    <value>Позиція X</value>
+  </data>
+  <data name="PositionY" xml:space="preserve">
+    <value>Позиція Y</value>
+  </data>
   <data name="Prerequisites" xml:space="preserve">
     <value>Необхідні попередні теми</value>
+  </data>
+  <data name="PrerequisiteTopics" xml:space="preserve">
+    <value>Попередні теми</value>
+  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>Опублікувати зміни</value>
+  </data>
+  <data name="PublishFailed" xml:space="preserve">
+    <value>Не вдалося опублікувати чернетку.</value>
   </data>
   <data name="Question" xml:space="preserve">
     <value>Запитання</value>
@@ -207,8 +291,14 @@
   <data name="RemeberMe" xml:space="preserve">
     <value>Запам'ятати мене</value>
   </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
   <data name="ResetGraph" xml:space="preserve">
     <value>Вмістити мапу</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Зберегти</value>
   </data>
   <data name="Score" xml:space="preserve">
     <value>Результат</value>
@@ -228,11 +318,44 @@
   <data name="TestResult" xml:space="preserve">
     <value>Результат тесту</value>
   </data>
+  <data name="TextMaterial" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Topic" xml:space="preserve">
+    <value>Тема</value>
+  </data>
+  <data name="TopicDeleted" xml:space="preserve">
+    <value>Тему видалено з чернетки.</value>
+  </data>
+  <data name="TopicDescription" xml:space="preserve">
+    <value>Опис теми</value>
+  </data>
   <data name="TopicNumber" xml:space="preserve">
     <value>Тема</value>
   </data>
+  <data name="TopicProperties" xml:space="preserve">
+    <value>Властивості теми</value>
+  </data>
+  <data name="TopicSaved" xml:space="preserve">
+    <value>Тему збережено в чернетці.</value>
+  </data>
+  <data name="TopicTitle" xml:space="preserve">
+    <value>Наза теми</value>
+  </data>
+  <data name="Translation" xml:space="preserve">
+    <value>Переклад</value>
+  </data>
   <data name="Ukrainian" xml:space="preserve">
     <value>Українська</value>
+  </data>
+  <data name="VersionPublished" xml:space="preserve">
+    <value>Зміни успішно опубліковано.</value>
+  </data>
+  <data name="VideoMaterial" xml:space="preserve">
+    <value>Відео</value>
+  </data>
+  <data name="VideoUrl" xml:space="preserve">
+    <value>URL Відео</value>
   </data>
   <data name="WatchVideo" xml:space="preserve">
     <value>Переглянути відео</value>

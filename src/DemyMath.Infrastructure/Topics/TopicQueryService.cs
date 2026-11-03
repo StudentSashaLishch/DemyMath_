@@ -1,6 +1,7 @@
 ﻿using DemyMath.Application.Localization;
 using DemyMath.Application.Topics;
 using DemyMath.Application.Topics.Models;
+using DemyMath.Domain.Entities;
 using DemyMath.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,20 +23,25 @@ public class TopicQueryService : ITopicQueryService
     public async Task<TopicDetailsDto?> GetByIdAsync(
         int topicId,
         string culture,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        ContentVersionStatus versionStatus = ContentVersionStatus.Published)
     {
         var topic = await _dbContext.Topics
             .AsNoTracking()
-            .Where(t => t.Id == topicId)
+            .Where(t =>
+                t.Id == topicId &&
+                t.Version.Status == versionStatus)
             .Select(t => new
             {
                 t.Id,
+                t.VersionId,
                 t.TitleStringId,
                 t.DescriptionStringId,
                 t.PositionX,
                 t.PositionY,
                 t.Icon,
                 PrerequisiteTopicIds = t.Prerequisites
+                    .Where(p => p.PrerequisiteTopic.VersionId == t.VersionId)
                     .Select(p => p.PrerequisiteTopicId)
                     .ToArray(),
                 ContentItems = t.ContentItems
@@ -73,6 +79,7 @@ public class TopicQueryService : ITopicQueryService
         var strings = await _localizedStrings.GetManyAsync(
             stringIds,
             culture,
+            topic.VersionId,
             cancellationToken);
 
         return new TopicDetailsDto
@@ -104,10 +111,12 @@ public class TopicQueryService : ITopicQueryService
 
     public async Task<IReadOnlyList<TopicDetailsDto>> GetAllAsync(
         string culture,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        ContentVersionStatus versionStatus = ContentVersionStatus.Published)
     {
         var topicIds = await _dbContext.Topics
             .AsNoTracking()
+            .Where(t => t.Version.Status == versionStatus)
             .OrderBy(t => t.Id)
             .Select(t => t.Id)
             .ToListAsync(cancellationToken);
@@ -117,7 +126,10 @@ public class TopicQueryService : ITopicQueryService
         foreach (var topicId in topicIds)
         {
             var topic = await GetByIdAsync(
-                topicId, culture, cancellationToken);
+                topicId,
+                culture,
+                cancellationToken,
+                versionStatus);
 
             if (topic is not null)
             {

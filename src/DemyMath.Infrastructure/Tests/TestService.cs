@@ -24,14 +24,18 @@ public class TestService : ITestService
     public async Task<TestDto?> GetByTopicIdAsync(
         int topicId,
         string culture,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        ContentVersionStatus versionStatus = ContentVersionStatus.Published)
     {
         var test = await _dbContext.Tests
             .AsNoTracking()
-            .Where(t => t.TopicId == topicId)
+            .Where(t =>
+                t.TopicId == topicId &&
+                t.Topic.Version.Status == versionStatus)
             .Select(t => new
             {
                 t.Id,
+                t.Topic.VersionId,
                 TopicTitleStringId = t.Topic.TitleStringId
             })
             .FirstOrDefaultAsync(cancellationToken);
@@ -67,6 +71,7 @@ public class TestService : ITestService
         var strings = await _localizedStrings.GetManyAsync(
             stringIds,
             culture,
+            test.VersionId,
             cancellationToken);
 
         var optionsByQuestion = options
@@ -133,22 +138,29 @@ public class TestService : ITestService
         int topicId,
         TestSubmissionDto submission,
         string culture,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        ContentVersionStatus versionStatus = ContentVersionStatus.Published)
     {
-        var testId = await _dbContext.Tests
+        var test = await _dbContext.Tests
             .AsNoTracking()
-            .Where(t => t.TopicId == topicId)
-            .Select(t => (int?)t.Id)
+            .Where(t =>
+                t.TopicId == topicId &&
+                t.Topic.Version.Status == versionStatus)
+            .Select(t => new
+            {
+                t.Id,
+                t.Topic.VersionId
+            })
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (testId is null)
+        if (test is null)
         {
             return null;
         }
 
         var questions = await _dbContext.Questions
             .AsNoTracking()
-            .Where(q => q.TestId == testId.Value)
+            .Where(q => q.TestId == test.Id)
             .OrderBy(q => q.Order)
             .ToListAsync(cancellationToken);
 
@@ -173,6 +185,7 @@ public class TestService : ITestService
         var strings = await _localizedStrings.GetManyAsync(
             stringIds,
             culture,
+            test.VersionId,
             cancellationToken);
 
         var results = new List<QuestionResultDto>(questions.Count);

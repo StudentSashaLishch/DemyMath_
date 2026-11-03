@@ -1,0 +1,329 @@
+﻿@using DemyMath.Models.Admin
+@using Microsoft.AspNetCore.Mvc.Localization
+@model AdminTopicEditViewModel
+
+@inject IHtmlLocalizer<SharedResource> T
+
+@{
+    ViewData["Title"] = Model.Topic.Id.HasValue
+        ? T["EditTopic"]
+        : T["CreateTopic"];
+
+    var isNew = !Model.Topic.Id.HasValue;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="@(isNew ? "CreateTopic" : "EditTopic")"
+      asp-route-id="@Model.Topic.Id"
+      method="post">
+
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+    <input asp-for="Topic.Id" type="hidden" />
+
+    <section class="mb-4">
+        <h2>@T["TopicProperties"]</h2>
+
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label asp-for="Topic.PositionX" class="form-label">
+                    @T["PositionX"]
+                </label>
+                <input asp-for="Topic.PositionX"
+                       type="number"
+                       step="any"
+                       class="form-control" />
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label asp-for="Topic.PositionY" class="form-label">
+                    @T["PositionY"]
+                </label>
+                <input asp-for="Topic.PositionY"
+                       type="number"
+                       step="any"
+                       class="form-control" />
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label asp-for="Topic.Icon" class="form-label">
+                    @T["Icon"]
+                </label>
+                <input asp-for="Topic.Icon"
+                       class="form-control"
+                       maxlength="32" />
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-4">
+        <h2>@T["TopicTitle"]</h2>
+
+        @for (var i = 0; i < Model.Topic.TitleTranslations.Count; i++)
+        {
+            <input asp-for="Topic.TitleTranslations[i].Culture"
+                   type="hidden" />
+
+            <div class="mb-3">
+                <label class="form-label">
+                    @T["Translation"] (@Model.Topic.TitleTranslations[i].Culture)
+                </label>
+
+                <input asp-for="Topic.TitleTranslations[i].Value"
+                       class="form-control" />
+            </div>
+        }
+    </section>
+
+    <section class="mb-4">
+        <h2>@T["TopicDescription"]</h2>
+
+        @for (var i = 0; i < Model.Topic.DescriptionTranslations.Count; i++)
+        {
+            <input asp-for="Topic.DescriptionTranslations[i].Culture"
+                   type="hidden" />
+
+            <div class="mb-3">
+                <label class="form-label">
+                    @T["Translation"] (@Model.Topic.DescriptionTranslations[i].Culture)
+                </label>
+
+                <textarea asp-for="Topic.DescriptionTranslations[i].Value"
+                          class="form-control"
+                          rows="3"></textarea>
+            </div>
+        }
+    </section>
+
+    <section class="mb-4">
+        <h2>@T["PrerequisiteTopics"]</h2>
+
+        @if (Model.AvailableTopics.Count == 0)
+        {
+            <p class="text-muted">@T["NoOtherTopics"]</p>
+        }
+        else
+        {
+            @foreach (var topic in Model.AvailableTopics)
+            {
+                <div class="form-check">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="Topic.PrerequisiteTopicIds"
+                           value="@topic.Id"
+                           id="prerequisite-@topic.Id"
+                           checked="@Model.Topic.PrerequisiteTopicIds.Contains(topic.Id)" />
+
+                    <label class="form-check-label"
+                           for="prerequisite-@topic.Id">
+                        @topic.Title
+                    </label>
+                </div>
+            }
+        }
+    </section>
+
+    <section class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-0">@T["LearningMaterials"]</h2>
+
+            <button type="button"
+                    class="btn btn-outline-primary"
+                    id="add-content-item">
+                @T["AddMaterial"]
+            </button>
+        </div>
+
+        <div id="content-items">
+            @for (var i = 0; i < Model.Topic.ContentItems.Count; i++)
+            {
+                var item = Model.Topic.ContentItems[i];
+
+                <div class="card mb-3 content-item">
+                    <div class="card-body">
+                        <input type="hidden"
+                               name="Topic.ContentItems[@i].Id"
+                               value="@item.Id" />
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3 class="h5 mb-0">@T["Material"]</h3>
+
+                            <button type="button"
+                                    class="btn btn-outline-danger btn-sm remove-content-item">
+                                @T["Remove"]
+                            </button>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                @T["MaterialType"]
+                            </label>
+
+                            <select name="Topic.ContentItems[@i].Type"
+                                    class="form-select content-type">
+                                <option value="Text"
+                                        selected="@(item.Type == "Text")">
+                                    @T["TextMaterial"]
+                                </option>
+                                <option value="Video"
+                                        selected="@(item.Type == "Video")">
+                                    @T["VideoMaterial"]
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="video-fields @(item.Type == "Video" ? "" : "d-none")">
+                            <label class="form-label">@T["VideoUrl"]</label>
+                            <input name="Topic.ContentItems[@i].VideoUrl"
+                                   value="@item.VideoUrl"
+                                   class="form-control"
+                                   type="url" />
+                        </div>
+
+                        <div class="text-fields @(item.Type == "Text" ? "" : "d-none")">
+                            @for (var j = 0; j < item.Translations.Count; j++)
+                            {
+                                <input type="hidden"
+                                       name="Topic.ContentItems[@i].Translations[@j].Culture"
+                                       value="@item.Translations[j].Culture" />
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        @T["Translation"] (@item.Translations[j].Culture)
+                                    </label>
+
+                                    <textarea name="Topic.ContentItems[@i].Translations[@j].Value"
+                                              class="form-control"
+                                              rows="4">@item.Translations[j].Value</textarea>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">
+            @T["Save"]
+        </button>
+
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            @T["Cancel"]
+        </a>
+    </div>
+</form>
+
+<template id="content-item-template">
+    <div class="card mb-3 content-item">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h5 mb-0">@T["Material"]</h3>
+
+                <button type="button"
+                        class="btn btn-outline-danger btn-sm remove-content-item">
+                    @T["Remove"]
+                </button>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">@T["MaterialType"]</label>
+
+                <select name="Topic.ContentItems[__index__].Type"
+                        class="form-select content-type">
+                    <option value="Text">@T["TextMaterial"]</option>
+                    <option value="Video">@T["VideoMaterial"]</option>
+                </select>
+            </div>
+
+            <div class="video-fields d-none">
+                <label class="form-label">@T["VideoUrl"]</label>
+                <input name="Topic.ContentItems[__index__].VideoUrl"
+                       class="form-control"
+                       type="url" />
+            </div>
+
+            <div class="text-fields">
+                @for (var j = 0; j < Model.SupportedCultures.Count; j++)
+                {
+                    <input type="hidden"
+                           name="Topic.ContentItems[__index__].Translations[@j].Culture"
+                           value="@Model.SupportedCultures[j]" />
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            @T["Translation"] (@Model.SupportedCultures[j])
+                        </label>
+
+                        <textarea name="Topic.ContentItems[__index__].Translations[@j].Value"
+                                  class="form-control"
+                                  rows="4"></textarea>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</template>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        (() => {
+            const container = document.getElementById("content-items");
+            const template = document.getElementById("content-item-template");
+            const addButton = document.getElementById("add-content-item");
+
+            function updateIndexes() {
+                const items = container.querySelectorAll(".content-item");
+
+                items.forEach((item, index) => {
+                    item.querySelectorAll("[name]").forEach(element => {
+                        element.name = element.name.replace(
+                            /Topic\.ContentItems\[\d+\]/g,
+                            `Topic.ContentItems[${index}]`
+                        );
+                    });
+                });
+            }
+
+            function updateType(item) {
+                const type = item.querySelector(".content-type").value;
+                item.querySelector(".text-fields")
+                    .classList.toggle("d-none", type !== "Text");
+                item.querySelector(".video-fields")
+                    .classList.toggle("d-none", type !== "Video");
+            }
+
+            addButton.addEventListener("click", () => {
+                const index = container.querySelectorAll(".content-item").length;
+                const html = template.innerHTML.replaceAll("__index__", index);
+
+                container.insertAdjacentHTML("beforeend", html);
+
+                const item = container.lastElementChild;
+                item.querySelector(".content-type")
+                    .addEventListener("change", () => updateType(item));
+
+                item.querySelector(".remove-content-item")
+                    .addEventListener("click", () => {
+                        item.remove();
+                        updateIndexes();
+                    });
+            });
+
+            container.querySelectorAll(".content-item").forEach(item => {
+                item.querySelector(".content-type")
+                    .addEventListener("change", () => updateType(item));
+
+                item.querySelector(".remove-content-item")
+                    .addEventListener("click", () => {
+                        item.remove();
+                        updateIndexes();
+                    });
+            });
+        })();
+    </script>
+}

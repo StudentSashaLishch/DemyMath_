@@ -5,11 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DemyMath.Infrastructure.Data;
 
-public class DemyMathDbContext
-    : IdentityDbContext<ApplicationUser>
+public class DemyMathDbContext : IdentityDbContext<ApplicationUser>
 {
-    public DemyMathDbContext(
-        DbContextOptions<DemyMathDbContext> options)
+    public DemyMathDbContext(DbContextOptions<DemyMathDbContext> options)
         : base(options)
     {
     }
@@ -18,17 +16,32 @@ public class DemyMathDbContext
     public DbSet<TopicPrerequisite> TopicPrerequisites => Set<TopicPrerequisite>();
     public DbSet<ContentItem> ContentItems => Set<ContentItem>();
     public DbSet<LocalizedString> LocalizedStrings => Set<LocalizedString>();
-
     public DbSet<Test> Tests => Set<Test>();
     public DbSet<Question> Questions => Set<Question>();
     public DbSet<MultipleChoiceQuestion> MultipleChoiceQuestions => Set<MultipleChoiceQuestion>();
     public DbSet<NumericQuestion> NumericQuestions => Set<NumericQuestion>();
     public DbSet<CoordinatePointQuestion> CoordinatePointQuestions => Set<CoordinatePointQuestion>();
     public DbSet<QuestionOption> QuestionOptions => Set<QuestionOption>();
+    public DbSet<LearningContentVersion> LearningContentVersions => Set<LearningContentVersion>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<LearningContentVersion>(entity =>
+        {
+            entity.Property(v => v.Status)
+                .HasConversion<string>()
+                .HasMaxLength(20);
+
+            entity.HasIndex(v => v.Status)
+                .IsUnique()
+                .HasFilter("\"Status\" = 'Draft'");
+
+            entity.HasIndex(v => v.Status)
+                .IsUnique()
+                .HasFilter("\"Status\" = 'Published'");
+        });
 
         builder.Entity<Topic>(entity =>
         {
@@ -43,15 +56,16 @@ public class DemyMathDbContext
                 .HasMaxLength(32);
 
             entity.HasIndex(t => t.TitleStringId);
+
+            entity.HasOne(t => t.Version)
+                .WithMany(v => v.Topics)
+                .HasForeignKey(t => t.VersionId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         builder.Entity<TopicPrerequisite>(entity =>
         {
-            entity.HasKey(p => new
-            {
-                p.TopicId,
-                p.PrerequisiteTopicId
-            });
+            entity.HasKey(p => new { p.TopicId, p.PrerequisiteTopicId });
 
             entity.ToTable(table =>
                 table.HasCheckConstraint(
@@ -81,11 +95,8 @@ public class DemyMathDbContext
             entity.Property(c => c.VideoUrl)
                 .HasMaxLength(2048);
 
-            entity.HasIndex(c => new
-            {
-                c.TopicId,
-                c.Order
-            }).IsUnique();
+            entity.HasIndex(c => new { c.TopicId, c.Order })
+                .IsUnique();
 
             entity.HasOne(c => c.Topic)
                 .WithMany(t => t.ContentItems)
@@ -97,6 +108,7 @@ public class DemyMathDbContext
         {
             entity.HasKey(s => new
             {
+                s.VersionId,
                 s.StringId,
                 s.Culture
             });
@@ -109,6 +121,11 @@ public class DemyMathDbContext
 
             entity.Property(s => s.Value)
                 .IsRequired();
+
+            entity.HasOne(s => s.Version)
+                .WithMany(v => v.LocalizedStrings)
+                .HasForeignKey(s => s.VersionId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         builder.Entity<Test>(entity =>
@@ -125,17 +142,15 @@ public class DemyMathDbContext
         builder.Entity<Question>(entity =>
         {
             entity.UseTptMappingStrategy();
+
             entity.ToTable("Questions");
 
             entity.Property(q => q.TextStringId)
                 .HasMaxLength(200)
                 .IsRequired();
 
-            entity.HasIndex(q => new
-            {
-                q.TestId,
-                q.Order
-            }).IsUnique();
+            entity.HasIndex(q => new { q.TestId, q.Order })
+                .IsUnique();
 
             entity.HasOne(q => q.Test)
                 .WithMany(t => t.Questions)
@@ -181,11 +196,8 @@ public class DemyMathDbContext
                 .HasMaxLength(200)
                 .IsRequired();
 
-            entity.HasIndex(o => new
-            {
-                o.QuestionId,
-                o.Order
-            }).IsUnique();
+            entity.HasIndex(o => new { o.QuestionId, o.Order })
+                .IsUnique();
         });
 
         builder.Entity<MultipleChoiceQuestion>()

@@ -2,7 +2,7 @@
 using DemyMath.Application.Tests;
 using DemyMath.Application.Tests.Models;
 using DemyMath.Application.Topics;
-using DemyMath.ViewModels;
+using DemyMath.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DemyMath.Web.Controllers;

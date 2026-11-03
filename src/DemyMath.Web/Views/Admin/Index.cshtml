@@ -1,0 +1,117 @@
+﻿
+@using DemyMath.Application.Topics.Models
+@using Microsoft.AspNetCore.Mvc.Localization
+@model IReadOnlyList<TopicDetailsDto>
+
+@inject IHtmlLocalizer<SharedResource> T
+
+@{
+    ViewData["Title"] = T["AdminTopicsTitle"];
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">@T["AdminTopicsTitle"]</h1>
+
+    <div class="d-flex gap-2">
+        <form asp-action="Publish"
+              method="post"
+              data-confirm="@T["ConfirmPublish"]"
+              onsubmit="return confirm(this.dataset.confirm)">
+            <button type="submit" class="btn btn-success">
+                @T["Publish"]
+            </button>
+        </form>
+
+        <a asp-action="CreateTopic" class="btn btn-primary">
+            @T["CreateTopic"]
+        </a>
+    </div>
+</div>
+
+@if (TempData["AdminMessage"] is string message)
+{
+    <div class="alert alert-success" role="alert">
+        @T[message]
+    </div>
+}
+
+@if (Model.Count == 0)
+{
+    <p>@T["AdminTopicsEmpty"]</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>@T["Topic"]</th>
+                    <th>@T["Description"]</th>
+                    <th>@T["Prerequisites"]</th>
+                    <th>@T["Test"]</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var topic in Model)
+                {
+                    <tr>
+                        <td>@topic.Title</td>
+                        <td>@topic.Description</td>
+                        <td>@topic.PrerequisiteTopicIds.Count</td>
+                        <td>
+                            @if (topic.HasTest)
+                            {
+                                <span>@T["Available"]</span>
+                            }
+                            else
+                            {
+                                <span>@T["NotAvailable"]</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="d-flex flex-wrap gap-2">
+                                <a asp-action="EditTopic"
+                                   asp-route-id="@topic.Id"
+                                   class="btn btn-sm btn-outline-primary">
+                                    @T["Edit"]
+                                </a>
+
+                                <a asp-action="EditTest"
+                                   asp-route-topicId="@topic.Id"
+                                   class="btn btn-sm btn-outline-primary">
+                                    @T["EditTest"]
+                                </a>
+
+                                @if (topic.HasTest)
+                                {
+                                    <form asp-action="DeleteTest"
+                                          asp-route-topicId="@topic.Id"
+                                          method="post"
+                                          data-confirm="@T["ConfirmDeleteTest"]"
+                                          onsubmit="return confirm(this.dataset.confirm)">
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger">
+                                            @T["DeleteTest"]
+                                        </button>
+                                    </form>
+                                }
+
+                                <form asp-action="DeleteTopic"
+                                      asp-route-id="@topic.Id"
+                                      method="post"
+                                      data-confirm="@T["ConfirmDeleteTopic"]"
+                                      onsubmit="return confirm(this.dataset.confirm)">
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-danger">
+                                        @T["Delete"]
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

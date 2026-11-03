@@ -1,0 +1,478 @@
+﻿
+@using Microsoft.AspNetCore.Mvc.Localization
+@model DemyMath.Models.AdminTestEditViewModel
+
+@inject IHtmlLocalizer<SharedResource> T
+
+@{
+    ViewData["Title"] = T["EditTest"];
+    var texts = System.Text.Json.JsonSerializer.Serialize(new
+    {
+        Question = T["Question"].Value,
+        QuestionType = T["QuestionType"].Value,
+        MultipleChoice = T["MultipleChoice"].Value,
+        Numeric = T["Numeric"].Value,
+        CoordinatePoint = T["CoordinatePoint"].Value,
+        QuestionText = T["QuestionText"].Value,
+        Options = T["Options"].Value,
+        CorrectOption = T["CorrectOption"].Value,
+        RemoveOption = T["RemoveOption"].Value,
+        AddOption = T["AddOption"].Value,
+        CorrectAnswer = T["CorrectAnswer"].Value,
+        Tolerance = T["Tolerance"].Value,
+        CorrectX = T["CorrectX"].Value,
+        CorrectY = T["CorrectY"].Value,
+        MinX = T["MinX"].Value,
+        MaxX = T["MaxX"].Value,
+        MinY = T["MinY"].Value,
+        MaxY = T["MaxY"].Value,
+        GridStep = T["GridStep"].Value,
+        RemoveQuestion = T["RemoveQuestion"].Value,
+        AddQuestion = T["AddQuestion"].Value,
+        Save = T["Save"].Value,
+        Back = T["Back"].Value
+    });
+}
+
+<h1>@T["EditTest"]</h1>
+
+@if (TempData["AdminMessage"] is string message)
+{
+    <div class="alert alert-success" role="alert">
+        @T[message]
+    </div>
+}
+
+<form asp-action="EditTest"
+      asp-route-topicId="@Model.Test.TopicId"
+      method="post">
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="Test.TopicId" />
+
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+    <div id="questions">
+        @for (var i = 0; i < Model.Test.Questions.Count; i++)
+        {
+            var question = Model.Test.Questions[i];
+
+            <section class="card mb-4 question-editor">
+                <div class="card-body">
+                    <input type="hidden"
+                           name="Test.Questions[@i].Id"
+                           value="@question.Id" />
+
+                    <h5 class="question-heading">
+                        @T["Question"] @(i + 1)
+                    </h5>
+
+                    <div class="mb-3">
+                        <label class="form-label">@T["QuestionType"]</label>
+                        <select class="form-select question-type"
+                                name="Test.Questions[@i].Type">
+                            <option value="MultipleChoice"
+                                    selected="@(question.Type == "MultipleChoice")">
+                                @T["MultipleChoice"]
+                            </option>
+                            <option value="Numeric"
+                                    selected="@(question.Type == "Numeric")">
+                                @T["Numeric"]
+                            </option>
+                            <option value="CoordinatePoint"
+                                    selected="@(question.Type == "CoordinatePoint")">
+                                @T["CoordinatePoint"]
+                            </option>
+                        </select>
+                    </div>
+
+                    <h6>@T["QuestionText"]</h6>
+
+                    @for (var c = 0; c < Model.SupportedCultures.Count; c++)
+                    {
+                        var culture = Model.SupportedCultures[c];
+                        var translation = question.Translations
+                            .FirstOrDefault(t => t.Culture == culture);
+
+                        <div class="mb-2">
+                            <label class="form-label">@culture</label>
+                            <input type="hidden"
+                                   name="Test.Questions[@i].Translations[@c].Culture"
+                                   value="@culture" />
+                            <textarea class="form-control"
+                                      name="Test.Questions[@i].Translations[@c].Value"
+                                      rows="2">@(translation?.Value ?? "")</textarea>
+                        </div>
+                    }
+
+                    <div class="question-options mt-3"
+                         style="display:@(question.Type == "MultipleChoice" ? "block" : "none")">
+                        <h6>@T["Options"]</h6>
+
+                        <div class="options-list">
+                            @for (var o = 0; o < question.Options.Count; o++)
+                            {
+                                var option = question.Options[o];
+
+                                <div class="border rounded p-3 mb-2 option-editor">
+                                    <input type="hidden"
+                                           name="Test.Questions[@i].Options[@o].Id"
+                                           value="@option.Id" />
+
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               name="Test.Questions[@i].Options[@o].IsCorrect"
+                                               value="true"
+                                               checked="@option.IsCorrect" />
+                                        <label class="form-check-label">
+                                            @T["CorrectOption"]
+                                        </label>
+                                    </div>
+
+                                    @for (var c = 0; c < Model.SupportedCultures.Count; c++)
+                                    {
+                                        var culture = Model.SupportedCultures[c];
+                                        var translation = option.Translations
+                                            .FirstOrDefault(t => t.Culture == culture);
+
+                                        <div class="mb-2">
+                                            <label class="form-label">@culture</label>
+                                            <input type="hidden"
+                                                   name="Test.Questions[@i].Options[@o].Translations[@c].Culture"
+                                                   value="@culture" />
+                                            <input class="form-control"
+                                                   name="Test.Questions[@i].Options[@o].Translations[@c].Value"
+                                                   value="@(translation?.Value ?? "")" />
+                                        </div>
+                                    }
+
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-danger remove-option">
+                                        @T["RemoveOption"]
+                                    </button>
+                                </div>
+                            }
+                        </div>
+
+                        <button type="button"
+                                class="btn btn-sm btn-outline-primary add-option">
+                            @T["AddOption"]
+                        </button>
+                    </div>
+
+                    <div class="question-numeric mt-3"
+                         style="display:@(question.Type == "Numeric" ? "block" : "none")">
+                        <div class="mb-2">
+                            <label class="form-label">@T["CorrectAnswer"]</label>
+                            <input class="form-control"
+                                   type="number"
+                                   step="any"
+                                   name="Test.Questions[@i].CorrectAnswer"
+                                   value="@question.CorrectAnswer" />
+                        </div>
+
+                        <div class="mb-2">
+                            <label class="form-label">@T["Tolerance"]</label>
+                            <input class="form-control"
+                                   type="number"
+                                   min="0"
+                                   step="any"
+                                   name="Test.Questions[@i].Tolerance"
+                                   value="@question.Tolerance" />
+                        </div>
+                    </div>
+
+                    <div class="question-coordinate mt-3"
+                         style="display:@(question.Type == "CoordinatePoint" ? "block" : "none")">
+                        <div class="row">
+                            @foreach (var field in new[]
+                            {
+                                ("CorrectX", T["CorrectX"].Value, question.CorrectX),
+                                ("CorrectY", T["CorrectY"].Value, question.CorrectY),
+                                ("Tolerance", T["Tolerance"].Value, question.Tolerance),
+                                ("MinX", T["MinX"].Value, question.MinX),
+                                ("MaxX", T["MaxX"].Value, question.MaxX),
+                                ("MinY", T["MinY"].Value, question.MinY),
+                                ("MaxY", T["MaxY"].Value, question.MaxY),
+                                ("GridStep", T["GridStep"].Value, question.GridStep)
+                            })
+                            {
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label">@field.Item2</label>
+                                    <input class="form-control"
+                                           type="number"
+                                           step="any"
+                                           name="Test.Questions[@i].@field.Item1"
+                                           value="@field.Item3" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <button type="button"
+                            class="btn btn-outline-danger mt-3 remove-question">
+                        @T["RemoveQuestion"]
+                    </button>
+                </div>
+            </section>
+        }
+    </div>
+
+    <button type="button"
+            id="add-question"
+            class="btn btn-outline-primary mb-3">
+        @T["AddQuestion"]
+    </button>
+
+    <hr />
+
+    <button type="submit" class="btn btn-primary">
+        @T["Save"]
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        @T["Back"]
+    </a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        const cultures = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.SupportedCultures));
+        const text = @Html.Raw(texts);
+        const questionsContainer = document.getElementById('questions');
+
+        function escapeHtml(value) {
+            return String(value).replace(/[&<>"']/g, char => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            })[char]);
+        }
+
+        function translationFields(prefix, values = {}) {
+            return cultures.map((culture, index) => `
+                <div class="mb-2">
+                    <label class="form-label">${escapeHtml(culture)}</label>
+                    <input type="hidden"
+                           name="${prefix}[${index}].Culture"
+                           value="${escapeHtml(culture)}">
+                    <textarea class="form-control"
+                              name="${prefix}[${index}].Value"
+                              rows="2">${escapeHtml(values[culture] ?? '')}</textarea>
+                </div>
+            `).join('');
+        }
+
+        function createOption(questionIndex, optionIndex) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'border rounded p-3 mb-2 option-editor';
+
+            wrapper.innerHTML = `
+                <div class="form-check mb-2">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="Test.Questions[${questionIndex}].Options[${optionIndex}].IsCorrect"
+                           value="true">
+                    <label class="form-check-label">
+                        ${escapeHtml(text.CorrectOption)}
+                    </label>
+                </div>
+
+                ${translationFields(
+                    `Test.Questions[${questionIndex}].Options[${optionIndex}].Translations`
+                )}
+
+                <button type="button"
+                        class="btn btn-sm btn-outline-danger remove-option">
+                    ${escapeHtml(text.RemoveOption)}
+                </button>
+            `;
+
+            return wrapper;
+        }
+
+        function createQuestion(index) {
+            const section = document.createElement('section');
+            section.className = 'card mb-4 question-editor';
+
+            section.innerHTML = `
+                <div class="card-body">
+                    <h5 class="question-heading">
+                        ${escapeHtml(text.Question)} ${index + 1}
+                    </h5>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            ${escapeHtml(text.QuestionType)}
+                        </label>
+                        <select class="form-select question-type"
+                                name="Test.Questions[${index}].Type">
+                            <option value="MultipleChoice">
+                                ${escapeHtml(text.MultipleChoice)}
+                            </option>
+                            <option value="Numeric">
+                                ${escapeHtml(text.Numeric)}
+                            </option>
+                            <option value="CoordinatePoint">
+                                ${escapeHtml(text.CoordinatePoint)}
+                            </option>
+                        </select>
+                    </div>
+
+                    <h6>${escapeHtml(text.QuestionText)}</h6>
+
+                    ${translationFields(`Test.Questions[${index}].Translations`)}
+
+                    <div class="question-options mt-3">
+                        <h6>${escapeHtml(text.Options)}</h6>
+                        <div class="options-list"></div>
+                        <button type="button"
+                                class="btn btn-sm btn-outline-primary add-option">
+                            ${escapeHtml(text.AddOption)}
+                        </button>
+                    </div>
+
+                    <div class="question-numeric mt-3" style="display:none">
+                        <div class="mb-2">
+                            <label class="form-label">
+                                ${escapeHtml(text.CorrectAnswer)}
+                            </label>
+                            <input class="form-control"
+                                   type="number"
+                                   step="any"
+                                   name="Test.Questions[${index}].CorrectAnswer"
+                                   value="0">
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">
+                                ${escapeHtml(text.Tolerance)}
+                            </label>
+                            <input class="form-control"
+                                   type="number"
+                                   min="0"
+                                   step="any"
+                                   name="Test.Questions[${index}].Tolerance"
+                                   value="0">
+                        </div>
+                    </div>
+
+                    <div class="question-coordinate mt-3" style="display:none">
+                        ${[
+                            ['CorrectX', text.CorrectX, 0],
+                            ['CorrectY', text.CorrectY, 0],
+                            ['Tolerance', text.Tolerance, 0],
+                            ['MinX', text.MinX, -5],
+                            ['MaxX', text.MaxX, 5],
+                            ['MinY', text.MinY, -5],
+                            ['MaxY', text.MaxY, 5],
+                            ['GridStep', text.GridStep, 1]
+                        ].map(([name, label, value]) => `
+                            <div class="mb-2">
+                                <label class="form-label">${escapeHtml(label)}</label>
+                                <input class="form-control"
+                                       type="number"
+                                       step="any"
+                                       name="Test.Questions[${index}].${name}"
+                                       value="${value}">
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <button type="button"
+                            class="btn btn-outline-danger mt-3 remove-question">
+                        ${escapeHtml(text.RemoveQuestion)}
+                    </button>
+                </div>
+            `;
+
+            return section;
+        }
+
+        function reindexQuestions() {
+            [...questionsContainer.children].forEach((question, questionIndex) => {
+                question.querySelector('.question-heading').textContent =
+                    `${text.Question} ${questionIndex + 1}`;
+
+                question.querySelectorAll('[name]').forEach(element => {
+                    element.name = element.name.replace(
+                        /Test\.Questions\[\d+\]/g,
+                        `Test.Questions[${questionIndex}]`
+                    );
+                });
+
+                reindexOptions(question, questionIndex);
+            });
+        }
+
+        function reindexOptions(question, questionIndex) {
+            const options = question.querySelectorAll('.option-editor');
+
+            options.forEach((option, optionIndex) => {
+                option.querySelectorAll('[name]').forEach(element => {
+                    element.name = element.name.replace(
+                        /Test\.Questions\[\d+\]\.Options\[\d+\]/g,
+                        `Test.Questions[${questionIndex}].Options[${optionIndex}]`
+                    );
+                });
+            });
+        }
+
+        document.getElementById('add-question').addEventListener('click', () => {
+            const index = questionsContainer.children.length;
+            questionsContainer.appendChild(createQuestion(index));
+            reindexQuestions();
+        });
+
+        questionsContainer.addEventListener('change', event => {
+            if (!event.target.classList.contains('question-type'))
+                return;
+
+            const question = event.target.closest('.question-editor');
+            const type = event.target.value;
+
+            question.querySelector('.question-options').style.display =
+                type === 'MultipleChoice' ? 'block' : 'none';
+
+            question.querySelector('.question-numeric').style.display =
+                type === 'Numeric' ? 'block' : 'none';
+
+            question.querySelector('.question-coordinate').style.display =
+                type === 'CoordinatePoint' ? 'block' : 'none';
+        });
+
+        questionsContainer.addEventListener('click', event => {
+            if (event.target.closest('.remove-question')) {
+                event.target.closest('.question-editor').remove();
+                reindexQuestions();
+                return;
+            }
+
+            if (event.target.closest('.add-option')) {
+                const question = event.target.closest('.question-editor');
+                const questionIndex = [...questionsContainer.children].indexOf(question);
+                const optionsList = question.querySelector('.options-list');
+                const optionIndex = optionsList.children.length;
+
+                optionsList.appendChild(
+                    createOption(questionIndex, optionIndex)
+                );
+
+                reindexQuestions();
+                return;
+            }
+
+            if (event.target.closest('.remove-option')) {
+                const question = event.target.closest('.question-editor');
+                event.target.closest('.option-editor').remove();
+
+                reindexQuestions();
+            }
+        });
+    </script>
+}

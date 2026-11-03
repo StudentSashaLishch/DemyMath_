@@ -1,8 +1,12 @@
 using System.Globalization;
+using DemyMath.Application.ContentVersions;
+using DemyMath.Application.Identity;
 using DemyMath.Application.Localization;
 using DemyMath.Application.Tests;
 using DemyMath.Application.Topics;
+using DemyMath.Infrastructure.ContentVersions;
 using DemyMath.Infrastructure.Data;
+using DemyMath.Infrastructure.Email;
 using DemyMath.Infrastructure.Identity;
 using DemyMath.Infrastructure.Localization;
 using DemyMath.Infrastructure.Tests;
@@ -10,8 +14,6 @@ using DemyMath.Infrastructure.Topics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using DemyMath.Infrastructure.Email;
-using DemyMath.Application.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,14 +90,23 @@ builder.Services.AddScoped<
     ITestService,
     TestService>();
 
-// Development seeders
-builder.Services.AddScoped<DevelopmentDataSeeder>();
-builder.Services.AddScoped<DevelopmentTestSeeder>();
+builder.Services.AddScoped<
+    ITestManagementService,
+    TestManagementService>();
+
+builder.Services.AddScoped<
+    ILearningContentVersionService,
+    LearningContentVersionService>();
 
 builder.Services.AddScoped<IdentitySeeder>();
 
+builder.Services.AddScoped<
+    ITopicManagementService,
+    TopicManagementService>();
+
 var app = builder.Build();
 
+// Identity roles
 await using (var scope = app.Services.CreateAsyncScope())
 {
     var identitySeeder = scope.ServiceProvider
@@ -109,20 +120,6 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
-}
-else
-{
-    await using var scope = app.Services.CreateAsyncScope();
-
-    var seeder = scope.ServiceProvider
-        .GetRequiredService<DevelopmentDataSeeder>();
-
-    await seeder.SeedAsync();
-
-    var testSeeder = scope.ServiceProvider
-        .GetRequiredService<DevelopmentTestSeeder>();
-
-    await testSeeder.SeedAsync();
 }
 
 app.UseRequestLocalization();
