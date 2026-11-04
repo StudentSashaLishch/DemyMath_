@@ -14,6 +14,8 @@ using DemyMath.Infrastructure.Topics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using DemyMath.Application.Progress;
+using DemyMath.Infrastructure.Progress;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -103,6 +105,10 @@ builder.Services.AddScoped<IdentitySeeder>();
 builder.Services.AddScoped<
     ITopicManagementService,
     TopicManagementService>();
+
+builder.Services.AddScoped<
+    IUserProgressService,
+    UserProgressService>();
 
 var app = builder.Build();
 

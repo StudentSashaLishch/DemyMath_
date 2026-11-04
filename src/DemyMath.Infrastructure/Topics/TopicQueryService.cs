@@ -34,15 +34,20 @@ public class TopicQueryService : ITopicQueryService
             .Select(t => new
             {
                 t.Id,
+                t.ProgressKey,
                 t.VersionId,
                 t.TitleStringId,
                 t.DescriptionStringId,
                 t.PositionX,
                 t.PositionY,
                 t.Icon,
-                PrerequisiteTopicIds = t.Prerequisites
+                Prerequisites = t.Prerequisites
                     .Where(p => p.PrerequisiteTopic.VersionId == t.VersionId)
-                    .Select(p => p.PrerequisiteTopicId)
+                    .Select(p => new
+                    {
+                        p.PrerequisiteTopicId,
+                        p.PrerequisiteTopic.TitleStringId
+                    })
                     .ToArray(),
                 ContentItems = t.ContentItems
                     .OrderBy(c => c.Order)
@@ -74,6 +79,7 @@ public class TopicQueryService : ITopicQueryService
             .Concat(topic.DescriptionStringId is null
                 ? []
                 : [topic.DescriptionStringId])
+            .Concat(topic.Prerequisites.Select(p => p.TitleStringId))
             .ToArray();
 
         var strings = await _localizedStrings.GetManyAsync(
@@ -85,6 +91,7 @@ public class TopicQueryService : ITopicQueryService
         return new TopicDetailsDto
         {
             Id = topic.Id,
+            ProgressKey = topic.ProgressKey,
             Title = strings[topic.TitleStringId],
             Description = topic.DescriptionStringId is null
                 ? null
@@ -93,7 +100,13 @@ public class TopicQueryService : ITopicQueryService
             PositionY = topic.PositionY,
             Icon = topic.Icon,
             HasTest = hasTest,
-            PrerequisiteTopicIds = topic.PrerequisiteTopicIds,
+            Prerequisites = topic.Prerequisites
+                .Select(p => new PrerequisiteTopicDto
+                {
+                    Id = p.PrerequisiteTopicId,
+                    Title = strings[p.TitleStringId]
+                })
+                .ToArray(),
             ContentItems = topic.ContentItems
                 .Select(c => new TopicContentItemDto
                 {

@@ -1,0 +1,78 @@
+﻿@model DemyMath.Application.Progress.Models.UserProgressSummaryDto
+
+@{
+    ViewData["Title"] = T["PersonalAccount"];
+}
+
+<h1>@T["PersonalAccount"]</h1>
+
+@if (TempData["ProfileMessage"] is string message)
+{
+    <div class="alert alert-info" role="alert">
+        @T[message]
+    </div>
+}
+
+<section class="mb-4">
+    <h2 class="h4">@T["LearningProgress"]</h2>
+
+    <p>
+        @T["CompletedTopics"]:
+        <strong>@Model.CompletedCount / @Model.TotalCount</strong>
+    </p>
+
+    <p>
+        @T["CompletionPercentage"]:
+        <strong>@Model.Percentage%</strong>
+    </p>
+
+    <div class="progress"
+         role="progressbar"
+         aria-label="@T["LearningProgress"]"
+         aria-valuenow="@Model.Percentage"
+         aria-valuemin="0"
+         aria-valuemax="100">
+        <div class="progress-bar"
+             style="width: @Model.Percentage%">
+            @Model.Percentage%
+        </div>
+    </div>
+</section>
+
+<hr />
+
+<section class="mb-4">
+    <h2 class="h4">@T["ResetProgress"]</h2>
+
+    <p>@T["ResetProgressDescription"]</p>
+
+    <form asp-action="ResetProgress"
+      method="post"
+      class="confirm-action"
+      data-confirm="@T["ConfirmResetProgress"]">
+        @Html.AntiForgeryToken()
+
+        <button type="submit" class="btn btn-outline-danger">
+            @T["ResetProgress"]
+        </button>
+    </form>
+</section>
+
+<hr />
+
+<section>
+    <h2 class="h4">@T["DeleteAccount"]</h2>
+
+    <p>@T["DeleteAccountDescription"]</p>
+
+    <form asp-action="DeleteAccount"
+      method="post"
+      class="confirm-action"
+      data-confirm="@T["ConfirmDeleteAccount"]">
+        @Html.AntiForgeryToken()
+
+        <button type="submit" class="btn btn-danger">
+            @T["DeleteAccount"]
+        </button>
+    </form>
+</section>

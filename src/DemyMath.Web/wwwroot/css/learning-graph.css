@@ -111,3 +111,14 @@
         min-height: 400px;
     }
 }
+
+.graph-node-completed .graph-node-icon {
+    background-color: #d1e7dd;
+    border-color: #198754;
+    color: #146c43;
+}
+
+.graph-node-completed:hover .graph-node-icon {
+    border-color: #146c43;
+    box-shadow: 0 3px 10px rgb(25 135 84 / 18%);
+}

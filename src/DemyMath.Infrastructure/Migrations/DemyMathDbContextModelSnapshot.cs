@@ -207,6 +207,11 @@ namespace DemyMath.Infrastructure.Migrations
                     b.Property<double>("PositionY")
                         .HasColumnType("double precision");
 
+                    b.Property<Guid>("ProgressKey")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
                     b.Property<string>("TitleStringId")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -240,6 +245,23 @@ namespace DemyMath.Infrastructure.Migrations
                         {
                             t.HasCheckConstraint("CK_TopicPrerequisite_NoSelfReference", "\"TopicId\" <> \"PrerequisiteTopicId\"");
                         });
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.UserTopicProgress", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
+
+                    b.Property<Guid>("ProgressKey")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CompletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("UserId", "ProgressKey");
+
+                    b.ToTable("UserTopicProgress");
                 });
 
             modelBuilder.Entity("DemyMath.Infrastructure.Identity.ApplicationUser", b =>
@@ -588,6 +610,15 @@ namespace DemyMath.Infrastructure.Migrations
                     b.Navigation("PrerequisiteTopic");
 
                     b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("DemyMath.Domain.Entities.UserTopicProgress", b =>
+                {
+                    b.HasOne("DemyMath.Infrastructure.Identity.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

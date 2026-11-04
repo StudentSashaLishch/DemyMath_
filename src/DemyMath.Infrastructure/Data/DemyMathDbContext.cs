@@ -23,6 +23,7 @@ public class DemyMathDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<CoordinatePointQuestion> CoordinatePointQuestions => Set<CoordinatePointQuestion>();
     public DbSet<QuestionOption> QuestionOptions => Set<QuestionOption>();
     public DbSet<LearningContentVersion> LearningContentVersions => Set<LearningContentVersion>();
+    public DbSet<UserTopicProgress> UserTopicProgress => Set<UserTopicProgress>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -61,6 +62,9 @@ public class DemyMathDbContext : IdentityDbContext<ApplicationUser>
                 .WithMany(v => v.Topics)
                 .HasForeignKey(t => t.VersionId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            entity.Property(t => t.ProgressKey)
+                .HasDefaultValueSql("gen_random_uuid()");
         });
 
         builder.Entity<TopicPrerequisite>(entity =>
@@ -205,5 +209,19 @@ public class DemyMathDbContext : IdentityDbContext<ApplicationUser>
             .WithOne(o => o.Question)
             .HasForeignKey(o => o.QuestionId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<UserTopicProgress>(entity =>
+        {
+            entity.HasKey(p => new { p.UserId, p.ProgressKey });
+
+            entity.Property(p => p.UserId)
+                .HasMaxLength(450)
+                .IsRequired();
+
+            entity.HasOne<ApplicationUser>()
+                .WithMany()
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
     }
 }

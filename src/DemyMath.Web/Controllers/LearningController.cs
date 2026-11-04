@@ -1,9 +1,11 @@
 ﻿using System.Globalization;
+using DemyMath.Application.Progress;
 using DemyMath.Application.Tests;
 using DemyMath.Application.Tests.Models;
 using DemyMath.Application.Topics;
 using DemyMath.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace DemyMath.Web.Controllers;
 
@@ -11,22 +13,36 @@ public class LearningController : Controller
 {
     private readonly ITopicQueryService _topics;
     private readonly ITestService _tests;
+    private readonly IUserProgressService _progress;
 
     public LearningController(
         ITopicQueryService topics,
-        ITestService tests)
+        ITestService tests,
+        IUserProgressService progress)
     {
         _topics = topics;
         _tests = tests;
+        _progress = progress;
     }
 
-    public async Task<IActionResult> Index(
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         var culture = CultureInfo.CurrentUICulture.Name;
+        var topics = await _topics.GetAllAsync(culture, cancellationToken);
 
-        var topics = await _topics.GetAllAsync(
-            culture, cancellationToken);
+        if (User.Identity?.IsAuthenticated == true)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+            var completedKeys = await _progress.GetCompletedProgressKeysAsync(
+                userId,
+                cancellationToken);
+
+            foreach (var topic in topics)
+            {
+                topic.IsCompleted = completedKeys.Contains(topic.ProgressKey);
+            }
+        }
 
         return View(topics);
     }
@@ -43,6 +59,16 @@ public class LearningController : Controller
         if (topic is null)
         {
             return NotFound();
+        }
+
+        if (User.Identity?.IsAuthenticated == true)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+            await _progress.MarkCompletedIfNoTestAsync(
+                userId,
+                id,
+                cancellationToken);
         }
 
         return View(topic);
@@ -92,6 +118,18 @@ public class LearningController : Controller
         if (test is null)
         {
             return NotFound();
+        }
+
+        if (User.Identity?.IsAuthenticated == true &&
+            result.TotalQuestions > 0 &&
+            result.CorrectAnswers == result.TotalQuestions)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+            await _progress.MarkCompletedAsync(
+                userId,
+                id,
+                cancellationToken);
         }
 
         return View(new TestPageViewModel

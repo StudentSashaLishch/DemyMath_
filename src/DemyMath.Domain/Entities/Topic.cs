@@ -3,6 +3,7 @@
 public class Topic
 {
     public int Id { get; set; }
+    public Guid ProgressKey { get; set; } = Guid.NewGuid();
 
     public required string TitleStringId { get; set; }
     public string? DescriptionStringId { get; set; }

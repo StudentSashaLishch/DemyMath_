@@ -24,18 +24,18 @@
     <p class="lead">@Model.Description</p>
 }
 
-@if (Model.PrerequisiteTopicIds.Count > 0)
+@if (Model.Prerequisites.Count > 0)
 {
     <h2 class="h4 mt-4">@T["Prerequisites"]</h2>
 
     <ul>
-        @foreach (var prerequisiteId in Model.PrerequisiteTopicIds)
+        @foreach (var prerequisite in Model.Prerequisites)
         {
             <li>
                 <a asp-controller="Learning"
                    asp-action="Topic"
-                   asp-route-id="@prerequisiteId">
-                    @T["TopicNumber"] @prerequisiteId
+                   asp-route-id="@prerequisite.Id">
+                    @prerequisite.Title
                 </a>
             </li>
         }

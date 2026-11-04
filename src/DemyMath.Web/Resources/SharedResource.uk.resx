@@ -360,4 +360,142 @@
   <data name="WatchVideo" xml:space="preserve">
     <value>Переглянути відео</value>
   </data>
+  <data name="PersonalAccount" xml:space="preserve">
+    <value>Особистий кабінет</value>
+  </data>
+  <data name="LearningProgress" xml:space="preserve">
+    <value>Навчальний прогрес</value>
+  </data>
+  <data name="CompletedTopics" xml:space="preserve">
+    <value>Завершені теми</value>
+  </data>
+  <data name="CompletionPercentage" xml:space="preserve">
+    <value>Відсоток завершення</value>
+  </data>
+  <data name="ResetProgress" xml:space="preserve">
+    <value>Скинути прогрес</value>
+  </data>
+  <data name="ResetProgressDescription" xml:space="preserve">
+    <value>Увесь збережений навчальний прогрес буде скинуто.</value>
+  </data>
+  <data name="ConfirmResetProgress" xml:space="preserve">
+    <value>Ви справді хочете скинути весь прогрес?</value>
+  </data>
+  <data name="ProgressReset" xml:space="preserve">
+    <value>Прогрес успішно скинуто.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Видалити обліковий запис</value>
+  </data>
+  <data name="DeleteAccountDescription" xml:space="preserve">
+    <value>Обліковий запис і пов'язаний із ним навчальний прогрес буде видалено. Цю дію неможливо скасувати.</value>
+  </data>
+  <data name="ConfirmDeleteAccount" xml:space="preserve">
+    <value>Ви справді хочете остаточно видалити обліковий запис?</value>
+  </data>
+  <data name="AccountDeleteFailed" xml:space="preserve">
+    <value>Не вдалося видалити обліковий запис.</value>
+  </data>
+  <data name="HomeTitle" xml:space="preserve">
+    <value>Вивчай математику послідовно</value>
+  </data>
+  <data name="HomeDescription" xml:space="preserve">
+    <value>DemyMath — навчальна платформа, що допомагає опановувати математичні теми у логічній послідовності, закріплювати знання та відстежувати власний прогрес.</value>
+  </data>
+  <data name="StartLearning" xml:space="preserve">
+    <value>Перейти до навчання</value>
+  </data>
+  <data name="HomeFeaturesTitle" xml:space="preserve">
+    <value>Можливості платформи</value>
+  </data>
+  <data name="HomeFeatureStructureTitle" xml:space="preserve">
+    <value>Структуроване навчання</value>
+  </data>
+  <data name="HomeFeatureStructureDescription" xml:space="preserve">
+    <value>Теми організовані у вигляді навчального графа, який показує зв'язки та необхідні попередні знання.</value>
+  </data>
+  <data name="HomeFeatureTheoryTitle" xml:space="preserve">
+    <value>Теорія та матеріали</value>
+  </data>
+  <data name="HomeFeatureTheoryDescription" xml:space="preserve">
+    <value>Вивчай теоретичний матеріал і переглядай навчальні відео в межах кожної теми.</value>
+  </data>
+  <data name="HomeFeatureProgressTitle" xml:space="preserve">
+    <value>Відстеження прогресу</value>
+  </data>
+  <data name="HomeFeatureProgressDescription" xml:space="preserve">
+    <value>Виконуй перевірочні завдання та відстежуй опановані теми у своєму профілі.</value>
+  </data>
+  <data name="PrivacyTitle" xml:space="preserve">
+    <value>Політика конфіденційності</value>
+  </data>
+  <data name="PrivacyIntroduction" xml:space="preserve">
+    <value>Ця сторінка описує, які персональні дані обробляє DemyMath та як вони використовуються.</value>
+  </data>
+  <data name="PrivacyDataTitle" xml:space="preserve">
+    <value>Які дані збираються</value>
+  </data>
+  <data name="PrivacyDataDescription" xml:space="preserve">
+    <value>Для роботи облікового запису система зберігає адресу електронної пошти та дані автентифікації. Паролі не зберігаються у відкритому вигляді. Для авторизованих користувачів також зберігається інформація про завершені навчальні теми.</value>
+  </data>
+  <data name="PrivacyPurposeTitle" xml:space="preserve">
+    <value>Мета обробки даних</value>
+  </data>
+  <data name="PrivacyPurposeDescription" xml:space="preserve">
+    <value>Дані використовуються для автентифікації користувачів, керування обліковими записами, збереження навчального прогресу та забезпечення роботи платформи.</value>
+  </data>
+  <data name="PrivacySecurityTitle" xml:space="preserve">
+    <value>Захист даних</value>
+  </data>
+  <data name="PrivacySecurityDescription" xml:space="preserve">
+    <value>Система використовує механізми автентифікації та захисту даних, передбачені ASP.NET Core Identity. Паролі обробляються із використанням безпечного хешування.</value>
+  </data>
+  <data name="PrivacyCookiesTitle" xml:space="preserve">
+    <value>Файли cookie</value>
+  </data>
+  <data name="PrivacyCookiesDescription" xml:space="preserve">
+    <value>Платформа використовує технічні файли cookie, необхідні для підтримки сеансу автентифікації та безпечної роботи сайту.</value>
+  </data>
+  <data name="PrivacyControlTitle" xml:space="preserve">
+    <value>Керування даними</value>
+  </data>
+  <data name="PrivacyControlDescription" xml:space="preserve">
+    <value>Авторизований користувач може скинути збережений навчальний прогрес або видалити свій обліковий запис через сторінку профілю.</value>
+  </data>
+  <data name="LearningGraphHint" xml:space="preserve">
+    <value>Натисніть на тему, щоб переглянути навчальні матеріали. Переміщуйте карту перетягуванням і змінюйте масштаб за допомогою коліщатка миші.</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Увійти</value>
+  </data>
+  <data name="LoginHeading" xml:space="preserve">
+    <value>Вхід до облікового запису</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Зареєструватися</value>
+  </data>
+  <data name="RegisterHeading" xml:space="preserve">
+    <value>Створення облікового запису</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Електронна пошта</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Підтвердіть пароль</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Забули пароль?</value>
+  </data>
+  <data name="ResendEmailConfirmation" xml:space="preserve">
+    <value>Повторно надіслати лист підтвердження</value>
+  </data>
+  <data name="ShowPassword" xml:space="preserve">
+    <value>Показати пароль</value>
+  </data>
+  <data name="HidePassword" xml:space="preserve">
+    <value>Приховати пароль</value>
+  </data>
 </root>

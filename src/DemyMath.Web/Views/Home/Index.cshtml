@@ -3,5 +3,44 @@
 }
 
 <section class="py-5">
-    <h1 class="display-5">@T["AppName"]</h1>
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">@T["HomeTitle"]</h1>
+
+                <p class="lead mb-4">
+                    @T["HomeDescription"]
+                </p>
+
+                <a asp-controller="Learning"
+                   asp-action="Index"
+                   class="btn btn-primary btn-lg">
+                    @T["StartLearning"]
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-4 border-top">
+    <div class="container">
+        <h2 class="h3 mb-4">@T["HomeFeaturesTitle"]</h2>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <h3 class="h5">@T["HomeFeatureStructureTitle"]</h3>
+                <p>@T["HomeFeatureStructureDescription"]</p>
+            </div>
+
+            <div class="col-md-4">
+                <h3 class="h5">@T["HomeFeatureTheoryTitle"]</h3>
+                <p>@T["HomeFeatureTheoryDescription"]</p>
+            </div>
+
+            <div class="col-md-4">
+                <h3 class="h5">@T["HomeFeatureProgressTitle"]</h3>
+                <p>@T["HomeFeatureProgressDescription"]</p>
+            </div>
+        </div>
+    </div>
 </section>

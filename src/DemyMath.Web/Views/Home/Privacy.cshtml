@@ -1,6 +1,34 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = T["PrivacyTitle"];
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container py-4">
+    <h1 class="mb-4">@T["PrivacyTitle"]</h1>
+
+    <p class="lead">@T["PrivacyIntroduction"]</p>
+
+    <section class="mt-4">
+        <h2 class="h4">@T["PrivacyDataTitle"]</h2>
+        <p>@T["PrivacyDataDescription"]</p>
+    </section>
+
+    <section class="mt-4">
+        <h2 class="h4">@T["PrivacyPurposeTitle"]</h2>
+        <p>@T["PrivacyPurposeDescription"]</p>
+    </section>
+
+    <section class="mt-4">
+        <h2 class="h4">@T["PrivacySecurityTitle"]</h2>
+        <p>@T["PrivacySecurityDescription"]</p>
+    </section>
+
+    <section class="mt-4">
+        <h2 class="h4">@T["PrivacyCookiesTitle"]</h2>
+        <p>@T["PrivacyCookiesDescription"]</p>
+    </section>
+
+    <section class="mt-4">
+        <h2 class="h4">@T["PrivacyControlTitle"]</h2>
+        <p>@T["PrivacyControlDescription"]</p>
+    </section>
+</div>

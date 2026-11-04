@@ -91,9 +91,9 @@ else
 
                 @foreach (var topic in Model)
                 {
-                    @foreach (var prerequisiteId in topic.PrerequisiteTopicIds)
+                    @foreach (var prerequisiteId in topic.Prerequisites)
                     {
-                        if (!topicsById.TryGetValue(prerequisiteId, out var prerequisite))
+                        if (!topicsById.TryGetValue(prerequisiteId.Id, out var prerequisite))
                         {
                             continue;
                         }
@@ -110,14 +110,14 @@ else
                             var startOffset = nodeRadius;
                             var endOffset = nodeRadius + 5;
 
-                                            <line
-                                                x1="@(prerequisite.PositionX + ux * startOffset)"
-                                                y1="@(prerequisite.PositionY + uy * startOffset)"
-                                                x2="@(topic.PositionX - ux * endOffset)"
-                                                y2="@(topic.PositionY - uy * endOffset)"
-                                                stroke="#6c757d"
-                                                stroke-width="2"
-                                                marker-end="url(#graphArrow)" />
+                            <line
+                                x1="@(prerequisite.PositionX + ux * startOffset)"
+                                y1="@(prerequisite.PositionY + uy * startOffset)"
+                                x2="@(topic.PositionX - ux * endOffset)"
+                                y2="@(topic.PositionY - uy * endOffset)"
+                                stroke="#6c757d"
+                                stroke-width="2"
+                                marker-end="url(#graphArrow)" />
                         }
                     }
                 }
@@ -128,7 +128,7 @@ else
                         <a asp-controller="Learning"
                            asp-action="Topic"
                            asp-route-id="@topic.Id"
-                           class="graph-node"
+                           class="graph-node @(topic.IsCompleted ? "graph-node-completed" : "")"
                            data-topic-id="@topic.Id"
                            title="@topic.Title"
                            aria-label="@topic.Title"

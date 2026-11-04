@@ -360,4 +360,142 @@
   <data name="WatchVideo" xml:space="preserve">
     <value>Watch video</value>
   </data>
+  <data name="PersonalAccount" xml:space="preserve">
+    <value>Personal account</value>
+  </data>
+  <data name="LearningProgress" xml:space="preserve">
+    <value>Learning progress</value>
+  </data>
+  <data name="CompletedTopics" xml:space="preserve">
+    <value>Completed topics</value>
+  </data>
+  <data name="CompletionPercentage" xml:space="preserve">
+    <value>Completion percentage</value>
+  </data>
+  <data name="ResetProgress" xml:space="preserve">
+    <value>Reset progress</value>
+  </data>
+  <data name="ResetProgressDescription" xml:space="preserve">
+    <value>All saved learning progress will be reset.</value>
+  </data>
+  <data name="ConfirmResetProgress" xml:space="preserve">
+    <value>Are you sure you want to reset all progress?</value>
+  </data>
+  <data name="ProgressReset" xml:space="preserve">
+    <value>Progress has been reset.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Delete account</value>
+  </data>
+  <data name="DeleteAccountDescription" xml:space="preserve">
+    <value>Your account and its associated learning progress will be deleted. This action cannot be undone.</value>
+  </data>
+  <data name="ConfirmDeleteAccount" xml:space="preserve">
+    <value>Are you sure you want to permanently delete your account?</value>
+  </data>
+  <data name="AccountDeleteFailed" xml:space="preserve">
+    <value>Failed to delete the account.</value>
+  </data>
+  <data name="HomeTitle" xml:space="preserve">
+    <value>Learn mathematics step by step</value>
+  </data>
+  <data name="HomeDescription" xml:space="preserve">
+    <value>DemyMath is an educational platform that helps you study mathematical topics in a logical sequence, reinforce your knowledge, and track your progress.</value>
+  </data>
+  <data name="StartLearning" xml:space="preserve">
+    <value>Start learning</value>
+  </data>
+  <data name="HomeFeaturesTitle" xml:space="preserve">
+    <value>Platform features</value>
+  </data>
+  <data name="HomeFeatureStructureTitle" xml:space="preserve">
+    <value>Structured learning</value>
+  </data>
+  <data name="HomeFeatureStructureDescription" xml:space="preserve">
+    <value>Topics are organized as a learning graph that shows their relationships and prerequisite knowledge.</value>
+  </data>
+  <data name="HomeFeatureTheoryTitle" xml:space="preserve">
+    <value>Theory and materials</value>
+  </data>
+  <data name="HomeFeatureTheoryDescription" xml:space="preserve">
+    <value>Study theoretical material and watch educational videos within each topic.</value>
+  </data>
+  <data name="HomeFeatureProgressTitle" xml:space="preserve">
+    <value>Progress tracking</value>
+  </data>
+  <data name="HomeFeatureProgressDescription" xml:space="preserve">
+    <value>Complete assessment exercises and track the topics you have mastered in your profile.</value>
+  </data>
+  <data name="PrivacyTitle" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="PrivacyIntroduction" xml:space="preserve">
+    <value>This page describes the personal data processed by DemyMath and how it is used.</value>
+  </data>
+  <data name="PrivacyDataTitle" xml:space="preserve">
+    <value>Data we collect</value>
+  </data>
+  <data name="PrivacyDataDescription" xml:space="preserve">
+    <value>To operate user accounts, the system stores email addresses and authentication data. Passwords are never stored in plain text. For authenticated users, information about completed learning topics is also stored.</value>
+  </data>
+  <data name="PrivacyPurposeTitle" xml:space="preserve">
+    <value>Purpose of data processing</value>
+  </data>
+  <data name="PrivacyPurposeDescription" xml:space="preserve">
+    <value>Data is used to authenticate users, manage accounts, save learning progress, and operate the platform.</value>
+  </data>
+  <data name="PrivacySecurityTitle" xml:space="preserve">
+    <value>Data security</value>
+  </data>
+  <data name="PrivacySecurityDescription" xml:space="preserve">
+    <value>The system uses authentication and data protection mechanisms provided by ASP.NET Core Identity. Passwords are processed using secure hashing.</value>
+  </data>
+  <data name="PrivacyCookiesTitle" xml:space="preserve">
+    <value>Cookies</value>
+  </data>
+  <data name="PrivacyCookiesDescription" xml:space="preserve">
+    <value>The platform uses technical cookies required to maintain authentication sessions and ensure the secure operation of the website.</value>
+  </data>
+  <data name="PrivacyControlTitle" xml:space="preserve">
+    <value>Managing your data</value>
+  </data>
+  <data name="PrivacyControlDescription" xml:space="preserve">
+    <value>Authenticated users can reset their saved learning progress or delete their account through the profile page.</value>
+  </data>
+  <data name="LearningGraphHint" xml:space="preserve">
+    <value>Select a topic to view its learning materials. Drag to move the graph and use the mouse wheel to zoom.</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="LoginHeading" xml:space="preserve">
+    <value>Sign in to your account</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="RegisterHeading" xml:space="preserve">
+    <value>Create a new account</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Forgot your password?</value>
+  </data>
+  <data name="ResendEmailConfirmation" xml:space="preserve">
+    <value>Resend email confirmation</value>
+  </data>
+  <data name="ShowPassword" xml:space="preserve">
+    <value>Show password</value>
+  </data>
+  <data name="HidePassword" xml:space="preserve">
+    <value>Hide password</value>
+  </data>
 </root>
